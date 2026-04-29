@@ -1,0 +1,11 @@
+{
+  "name": "@zentro/ts-config",
+  "version": "1.0.0",
+  "private": true,
+  "files": [
+    "base.json",
+    "nextjs.json",
+    "hono.json",
+    "react.json"
+  ]
+}

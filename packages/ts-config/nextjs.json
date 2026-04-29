@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Nextjs",
+  "extends": "./react.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "lib": ["ES2024", "DOM", "DOM.Iterable"]
+  }
+}

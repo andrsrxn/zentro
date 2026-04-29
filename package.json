@@ -1,0 +1,47 @@
+{
+  "name": "zentro",
+  "description": "Project Management System",
+  "version": "1.0.0",
+  "author": {
+    "name": "andrsrxn",
+    "email": "andresraxon.art@gmail.com"
+  },
+  "license": "MIT",
+  "private": true,
+  "keywords": [
+    "project-management",
+    "productivity",
+    "open-source"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint && echo Lint finished",
+    "format": "prettier --write . && echo Format finished",
+    "typecheck": "turbo run typecheck && echo Typecheck finished",
+    "db:generate": "turbo run db:generate && echo DB Generate finished",
+    "db:migrate": "turbo run db:migrate && echo DB Migrate finished",
+    "dev:web": "turbo run dev --filter=web",
+    "dev:api": "turbo run dev --filter=api",
+    "build:api": "turbo run build --filter=api",
+    "build:web": "turbo run build --filter=web",
+    "lint:web": "turbo run lint --filter=web",
+    "lint:api": "turbo run lint --filter=api",
+    "typecheck:web": "turbo run typecheck --filter=web",
+    "typecheck:api": "turbo run typecheck --filter=api",
+    "format:web": "turbo run format --filter=web",
+    "format:api": "turbo run format --filter=api"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.9",
+    "prettier": "3.7.4",
+    "prettier-plugin-tailwindcss": "0.8.0",
+    "turbo": "2.9.6",
+    "typescript": "5.9.2"
+  },
+  "packageManager": "pnpm@10.0.0",
+  "engines": {
+    "node": "^24",
+    "pnpm": "^10.0.0"
+  }
+}

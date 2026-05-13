@@ -10,7 +10,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev dev:types",
+    "dev": "turbo run dev",
     "lint": "turbo run lint && echo Lint finished",
     "format": "prettier --write . && echo Format finished",
     "typecheck": "turbo run typecheck && echo Typecheck finished",

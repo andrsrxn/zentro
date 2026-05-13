@@ -3,7 +3,6 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "dev:types": "tsc  --watch",
     "lint": "biome check",
     "build": "tsc",
     "typecheck": "tsc --noEmit -p tsconfig.json",

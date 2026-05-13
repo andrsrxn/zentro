@@ -1,8 +1,9 @@
 ![Zentro Banner](https://res.cloudinary.com/dq5nfyajn/image/upload/v1777566829/logo_olanwf.svg)
 
-# Zentro
+# Zentro | Notes App
 
-A full-stack notes app project (Still in progress...)
+A fast, modern notes application that helps you stay organized.
+(Still in development...)
 
 ## Tech Stack
 
@@ -22,10 +23,15 @@ A full-stack notes app project (Still in progress...)
 
 ## Monorepo
 
-- [x] api
-- [x] web
-- [x] @zentro/constants
-- [x] @zentro/utils
-- [x] @zentro/ts-config
-- [x] @zentro/tsdown-config
-- [x] @zentro/vitest-config
+### Apps
+
+- api
+- web
+
+### Packages
+
+- @zentro/constants
+- @zentro/utils
+- @zentro/ts-config
+- @zentro/tsdown-config
+- @zentro/vitest-config

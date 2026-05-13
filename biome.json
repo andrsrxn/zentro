@@ -7,10 +7,13 @@
     "includes": [
       "**",
       "!**/dist",
+      "!**/.turbo",
+      "!**/.next",
       "!**/*.mjs",
       "!**/*.cjs",
       "!**/node_modules",
       "!**/pnpm-lock.yaml",
+      "!**/*.tsbuildinfo",
       "!**/*.lock"
     ]
   },
@@ -557,7 +560,32 @@
         }
       }
     },
-
+    {
+      "includes": ["**/env.ts", "**/env-client.ts", "**/tests/**"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noProcessGlobal": "off"
+          },
+          "style": {
+            "noProcessEnv": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/tests/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noMagicNumbers": "off"
+          },
+          "performance": {
+            "useTopLevelRegex": "off"
+          }
+        }
+      }
+    },
     {
       "includes": ["packages/**"],
       "linter": {
@@ -565,6 +593,16 @@
           "performance": {
             "noBarrelFile": "off",
             "noReExportAll": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["packages/schemas/**"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noMagicNumbers": "off"
           }
         }
       }

@@ -1,0 +1,22 @@
+{
+  "extends": "@zentro/ts-config/hono",
+  "compilerOptions": {
+    "types": ["node"],
+    "outDir": "./dist/types",
+    "composite": true,
+    "emitDeclarationOnly": true,
+    "noEmit": false,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "src/**/*",
+    "tsdown.config.ts",
+    "vitest.config.ts",
+    "tests/**/*.ts",
+    "drizzle.config.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
+}

@@ -2,10 +2,18 @@
   "name": "@zentro/ts-config",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
+  "exports": {
+    "./base": "./src/base.json",
+    "./nextjs": "./src/nextjs.json",
+    "./hono": "./src/hono.json",
+    "./react": "./src/react.json",
+    "./no-build": "./src/no-build.json"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
   "files": [
-    "base.json",
-    "nextjs.json",
-    "hono.json",
-    "react.json"
+    "src"
   ]
 }

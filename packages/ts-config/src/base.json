@@ -21,9 +21,11 @@
     "noUnusedLocals": true,
     "noImplicitAny": true,
     "noUnusedParameters": true,
+    "allowImportingTsExtensions": true,
     "noFallthroughCasesInSwitch": true,
     "strictNullChecks": true,
     "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "noImplicitThis": true
   }
 }

@@ -1,0 +1,19 @@
+{
+  "name": "@zentro/tsdown-config",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "src"
+  ],
+  "exports": {
+    ".": "./src/tsdown.config.ts"
+  },
+  "peerDependencies": {
+    "tsdown": "^0"
+  },
+  "devDependencies": {
+    "tsdown": "0.21.10",
+    "@zentro/ts-config": "workspace:*"
+  }
+}

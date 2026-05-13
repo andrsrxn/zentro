@@ -1,5 +1,5 @@
 {
-  "extends": "@zentro/ts-config/nextjs.json",
+  "extends": "@zentro/ts-config/nextjs",
   "compilerOptions": {
     "plugins": [
       {
@@ -16,7 +16,13 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "../../api/src/**/*"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "references": [
+    {
+      "path": "../api"
+    }
+  ]
 }

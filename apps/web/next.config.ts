@@ -1,21 +1,26 @@
 import type { NextConfig } from 'next'
 
-const nextConfig = {
+const nextConfig: NextConfig = {
+  poweredByHeader: false,
   experimental: {
     staleTimes: {
-      dynamic: 30,
-      static: 180,
+      static: 30,
+      dynamic: 60,
     },
   },
+  typedRoutes: false,
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'pexels.com',
+        hostname: 'res.cloudinary.com',
+        pathname: '/dq5nfyajn/**',
+        port: '',
+        search: '',
       },
     ],
   },
-  poweredByHeader: false,
 } satisfies NextConfig
 
 export default nextConfig

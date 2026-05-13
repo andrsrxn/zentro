@@ -1,0 +1,33 @@
+{
+  "name": "@zentro/constants",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    "./api": "./src/api.ts",
+    "./auth": "./src/auth.ts",
+    "./company": "./src/company.ts",
+    "./cookies": "./src/cookies.ts",
+    "./countries": "./src/countries.ts",
+    "./errors": "./src/errors.ts",
+    "./env": "./src/env.ts",
+    "./headers": "./src/headers.ts",
+    "./media": "./src/media.ts",
+    "./notes": "./src/notes.ts",
+    "./strings": "./src/strings.ts",
+    "./success": "./src/success.ts",
+    "./users": "./src/users.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check"
+  },
+  "files": [
+    "src"
+  ],
+  "devDependencies": {
+    "@zentro/ts-config": "workspace:*"
+  }
+}

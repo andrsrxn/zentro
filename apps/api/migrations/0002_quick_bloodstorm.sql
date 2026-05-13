@@ -1,0 +1,1 @@
+ALTER TABLE "users" ALTER COLUMN "time_zone" DROP NOT NULL;

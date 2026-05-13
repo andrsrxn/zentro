@@ -2,7 +2,7 @@
 
 # Zentro
 
-Notes App Full Stack Project (Still in progress...)
+A full-stack notes app project (Still in progress...)
 
 ## Tech Stack
 

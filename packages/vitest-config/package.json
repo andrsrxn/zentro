@@ -11,7 +11,7 @@
     "./server": "./src/server.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc",
     "lint": "biome check"
   },
   "files": [

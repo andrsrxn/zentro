@@ -14,7 +14,6 @@ import { isDevelopmentEnv, isProductionEnv } from '@zentro/utils/env'
 import { AppError } from '@zentro/utils/errors'
 import { Hono } from 'hono'
 import type { ApplyGlobalResponse } from 'hono/client'
-import { hc } from 'hono/client'
 import { compress } from 'hono/compress'
 import { logger as requestLogger } from 'hono/logger'
 import { secureHeaders } from 'hono/secure-headers'
@@ -159,7 +158,3 @@ export type AppWithErrors = ApplyGlobalResponse<
     [Key in ContentfulStatusCode]: { json: ApiResponseError }
   }
 >
-
-export type Client = ReturnType<typeof hc<AppWithErrors>>
-
-export const hcWithType = (...args: Parameters<typeof hc>): Client => hc<AppWithErrors>(...args)

@@ -9,9 +9,8 @@
     "build": {
       "dependsOn": ["^typecheck", "^lint", "^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "dist-types/**"]
     },
-
     "dev": {
       "persistent": true,
       "cache": false

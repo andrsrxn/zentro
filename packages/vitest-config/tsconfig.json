@@ -1,8 +1,5 @@
 {
   "extends": "@zentro/ts-config/no-build",
   "include": ["src/**/*"],
-  "exclude": ["node_modules"],
-  "compilerOptions": {
-    "allowImportingTsExtensions": true
-  }
+  "exclude": ["node_modules"]
 }

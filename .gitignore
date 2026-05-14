@@ -15,6 +15,7 @@ node_modules/
 out/
 build/
 dist/
+dist-types/
 
 # Environment Variables 
 .env*

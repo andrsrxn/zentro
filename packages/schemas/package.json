@@ -9,7 +9,7 @@
     "./notes": "./src/notes.ts"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc",
     "lint": "biome check",
     "test": "vitest"
   },

@@ -6,7 +6,6 @@
     "lint": "biome check",
     "build": "tsc",
     "typecheck": "tsc --noEmit -p tsconfig.json",
-    "build:types": "tsc ",
     "test": "vitest",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",

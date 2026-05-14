@@ -1,9 +1,10 @@
 import type { ResponseError } from '@zentro/constants/errors'
 import { AppError } from '@zentro/utils/errors'
+import { hc } from 'hono/client'
 import { envClient } from '@/lib/config/env-client'
-import { hcWithType } from '../../../api/src/index'
+import type { AppWithErrors } from '../../../api/src/index'
 
-export const apiClient = hcWithType(envClient.NEXT_PUBLIC_API_URL, {
+export const apiClient = hc<AppWithErrors>(envClient.NEXT_PUBLIC_API_URL, {
   init: {
     credentials: 'include',
     referrerPolicy: 'strict-origin-when-cross-origin',

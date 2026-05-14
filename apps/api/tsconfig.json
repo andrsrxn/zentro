@@ -5,6 +5,7 @@
     "outDir": "./dist-types",
     "composite": true,
     "noEmit": false,
+    "emitDeclarationOnly": true,
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]

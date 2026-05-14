@@ -9,8 +9,9 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "turbo run build",
-    "dev": "turbo run dev ",
+    "build": "pnpm build:types && turbo run build",
+    "build:types": "turbo run build:types",
+    "dev": "pnpm build:types && turbo run dev",
     "lint": "turbo run lint && echo Lint finished",
     "format": "prettier --write . && echo Format finished",
     "typecheck": "turbo run typecheck && echo Typecheck finished",

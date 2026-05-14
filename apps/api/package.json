@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "lint": "biome check",
-    "build": "tsc",
+    "build:types": "tsc",
+    "build": "tsdown",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "test": "vitest",
     "db:generate": "drizzle-kit generate",

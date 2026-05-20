@@ -1,4 +1,4 @@
-import type { ResponseError } from '@zentro/constants/errors'
+import { HTTP_ERRORS, type ResponseError } from '@zentro/constants/errors'
 import { AppError } from '@zentro/utils/errors'
 import { hc } from 'hono/client'
 import { envClient } from '@/lib/config/env-client'
@@ -32,24 +32,40 @@ export async function rpc<T extends Promise<Response>>({
   request: T
   error: ResponseError
 }): Promise<InferRpcData<T>> {
-  // biome-ignore lint/nursery/useAwaitThenable: request is a Promise
-  const response = await request
-  const parsed = await response.json()
+  try {
+    // biome-ignore lint/nursery/useAwaitThenable: request is a Promise
+    const response = await request
+    const parsed = await response.json()
 
-  if (parsed.error) {
-    throw new AppError(parsed.error.statusCode, {
-      message: parsed.error.message,
+    if (parsed.error) {
+      throw new AppError(parsed.error.statusCode, {
+        message: parsed.error.message,
 
-      type: parsed.error.type,
+        type: parsed.error.type,
+      })
+    }
+
+    if (!parsed.data) {
+      throw new AppError(error.statusCode, {
+        message: error.message,
+        type: error.type,
+      })
+    }
+
+    return parsed.data
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error
+    }
+
+    const wrapped = AppError.from(error, {
+      statusCode: HTTP_ERRORS.internalError.statusCode,
+      type: HTTP_ERRORS.internalError.type,
+      message: HTTP_ERRORS.internalError.message,
+      critical: true,
+      cause: error,
     })
-  }
 
-  if (!parsed.data) {
-    throw new AppError(error.statusCode, {
-      message: error.message,
-      type: error.type,
-    })
+    throw wrapped
   }
-
-  return parsed.data
 }

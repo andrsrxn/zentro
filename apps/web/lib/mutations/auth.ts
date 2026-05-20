@@ -6,8 +6,7 @@ export const signOut = async () => {
   try {
     const session = await authClient.signOut()
     return session
-  } catch (error) {
-    console.error(error)
+  } catch {
     return {
       data: null,
       error: {

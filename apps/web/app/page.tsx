@@ -4,13 +4,10 @@ import { IMAGES } from '@zentro/constants/media'
 import { formatDate } from '@zentro/utils/dates'
 import Link from 'next/link'
 import { SignInForm } from '@/components/auth/sign-in-form'
-import { FloatingBar } from '@/components/notes/floating-bar'
 import { Notes } from '@/components/notes/notes'
 import { NotesPanel } from '@/components/notes/panel'
-import { AccountDropdown } from '@/components/shared/account-dropdown'
-import { HeaderCountryFlag } from '@/components/shared/country-flag'
 import { Panel } from '@/components/shared/panel'
-import { ThemeSwitcher } from '@/components/shared/theme-switcher'
+import { ShortcutsDialog } from '@/components/shared/shortcuts-dialog'
 import {
   Card,
   CardContent,
@@ -19,6 +16,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
+import { AccountDialog } from '@/components/user/account-dialog'
+import { AccountDropdown } from '@/components/user/account-dropdown'
 import { getSession } from '@/lib/data/auth'
 
 export default async function Home() {
@@ -82,12 +81,12 @@ export default async function Home() {
               })}>
               {formatDate({ date: new Date(), timeZone: session.data.user.timeZone as TimeZone })}
             </time>
-            <HeaderCountryFlag countryCode={session.data.user.countryCode} />
-            <ThemeSwitcher />
+
             <AccountDropdown
               name={session.data.user.name}
               email={session.data.user.email}
               avatar={session.data.user.image ?? undefined}
+              countryCode={session.data.user.countryCode}
             />
           </div>
         </div>
@@ -95,7 +94,9 @@ export default async function Home() {
       <NotesPanel>
         <Notes />
       </NotesPanel>
-      <FloatingBar />
+
+      <ShortcutsDialog />
+      <AccountDialog />
     </section>
   )
 }

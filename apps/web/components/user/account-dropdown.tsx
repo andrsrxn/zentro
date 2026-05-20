@@ -1,8 +1,11 @@
 'use client'
 
-import { IconKeyboard, IconLogout2, IconSettings, IconUser } from '@tabler/icons-react'
+import { IconKeyboard, IconLogout2, IconMoon, IconSun, IconUser } from '@tabler/icons-react'
+import type { CountryCode } from '@zentro/constants/countries'
 import { useRouter } from 'next/navigation'
+import { useTheme } from 'next-themes'
 import { type ComponentProps, useState } from 'react'
+import { HeaderCountryFlag } from '@/components/shared/country-flag'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
@@ -12,22 +15,31 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { signOut } from '@/lib/mutations/auth'
+import { useSharedStore } from '@/lib/store/shared'
+import { useUserStore } from '@/lib/store/user'
+import { getCountryName } from '@/lib/utils/geolocation'
 
 export const AccountDropdown = ({
   avatar,
   name,
   email,
+  countryCode,
   ...props
 }: {
   avatar?: string
   name?: string
   email: string
+  countryCode: string
 } & ComponentProps<typeof DropdownMenu>) => {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const setShortcutsDialogOpen = useSharedStore(state => state.setShortcutsDialogOpen)
+  const setAccountDialogOpen = useUserStore(state => state.setAccountDialogOpen)
+  const { resolvedTheme, setTheme } = useTheme()
 
   const handleSignOut = async () => {
     setIsLoading(true)
@@ -73,16 +85,31 @@ export const AccountDropdown = ({
             </div>
           </div>
         </DropdownMenuLabel>
+        <span className="pointer-events-none relative flex cursor-pointer items-center gap-1.5 rounded-md px-1.5 py-1 text-sm outline-hidden select-none data-disabled:pointer-events-none data-disabled:opacity-50 data-inset:pl-7 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4">
+          <HeaderCountryFlag countryCode={countryCode} className='w-4 rounded-xs' />
+          From {getCountryName(countryCode as CountryCode)?.nativeName ?? countryCode}
+        </span>
         <DropdownMenuSeparator />
 
         <DropdownMenuGroup>
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setAccountDialogOpen(true)}>
+            <IconUser />
+            Account
+            <DropdownMenuShortcut>A</DropdownMenuShortcut>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setShortcutsDialogOpen(true)}>
             <IconKeyboard />
             Shortcuts
+            <DropdownMenuShortcut>K</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <IconSettings />
-            Settings
+          <DropdownMenuItem
+            onClick={() => {
+              setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
+            }}>
+            <IconMoon className='scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90' />
+            <IconSun className='absolute scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0' />
+            Change to {resolvedTheme === 'dark' ? 'Light' : 'Dark'} Mode
+            <DropdownMenuShortcut>D</DropdownMenuShortcut>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

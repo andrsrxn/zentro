@@ -16,8 +16,7 @@ export const getSession = cache(async () => {
       },
     })
     return session
-  } catch (error) {
-    console.error(error)
+  } catch {
     return {
       data: null,
       error: {

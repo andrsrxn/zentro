@@ -39,7 +39,6 @@ export const AlertDialogConfirm = ({
       }
     }}>
     <AlertDialogContent
-      autoFocus
       onCloseAutoFocus={e => {
         if (returnFocusRef?.current) {
           e.preventDefault()
@@ -53,7 +52,7 @@ export const AlertDialogConfirm = ({
       </AlertDialogHeader>
 
       <AlertDialogFooter>
-        <Button onClick={onCancel} autoFocus variant='outline'>
+        <Button onClick={onCancel} variant='outline'>
           {cancelButton}
         </Button>
 

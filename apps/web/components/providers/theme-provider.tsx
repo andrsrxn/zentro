@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/complexity/noExcessiveCognitiveComplexity: validations */
 'use client'
 
-import { ThemeProvider as NextThemesProvider } from 'next-themes'
+import { ThemeProvider as NextThemesProvider } from '@teispace/next-themes'
 
 function ThemeProvider({ children, ...props }: React.ComponentProps<typeof NextThemesProvider>) {
   return (

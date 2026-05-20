@@ -9,7 +9,7 @@ export const normalizeCause = (cause: unknown): NormalizedCause | undefined => {
   }
 
   if (cause instanceof Error) {
-    return cause.toString()
+    return `Name: ${cause.name}. Message: ${cause.message}. Cause: ${cause.cause}`
   }
 
   if (typeof cause === 'string') {
@@ -56,6 +56,14 @@ export class AppError extends Error {
     super(options.message)
     Object.setPrototypeOf(this, new.target.prototype)
 
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor)
+    }
+
+    if (options.cause instanceof Error) {
+      Error.captureStackTrace(options.cause, this.constructor)
+    }
+
     this.name = 'AppError'
     this.type = options.type
     this.statusCode = statusCode
@@ -63,17 +71,13 @@ export class AppError extends Error {
     this.errors = options.errors
     this.critical = options.critical ?? false
     this.cause = normalizeCause(options.cause)
-
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, this.constructor)
-    }
   }
 
   toJSON(): AppErrorJSON {
     return {
       name: this.name,
       message: this.message,
-      stack: this.cause ? undefined : this.stack,
+      stack: this.stack,
       type: this.type,
       statusCode: this.statusCode,
       details: this.details,

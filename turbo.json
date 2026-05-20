@@ -41,6 +41,9 @@
     },
     "db:studio": {
       "cache": false
+    },
+    "db:auth:docs": {
+      "cache": false
     }
   }
 }

@@ -16,6 +16,10 @@ export const createNoteSchema = z.object({
 })
 
 export const updateNoteSchema = createNoteSchema.partial()
+export const updateNoteOrderSchema = z.object({
+  toIndex: z.number(invalidType).nonnegative({ error: 'Invalid order number' }),
+})
 
 export type CreateNoteInput = z.infer<typeof createNoteSchema>
 export type UpdateNoteInput = z.infer<typeof updateNoteSchema>
+export type UpdateNoteOrderInput = z.infer<typeof updateNoteOrderSchema>

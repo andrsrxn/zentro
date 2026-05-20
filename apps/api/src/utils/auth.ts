@@ -1,7 +1,7 @@
 /** biome-ignore-all lint/performance/noNamespaceImport: one single object */
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { betterAuth } from 'better-auth/minimal'
-import { openAPI } from 'better-auth/plugins'
+import { lastLoginMethod, openAPI } from 'better-auth/plugins'
 import { env } from '@/config/env'
 import { API } from '@/constants/api'
 import { ALLOWED_ORIGINS } from '@/constants/hosts'
@@ -20,7 +20,7 @@ export const auth = betterAuth({
     schema,
   }),
 
-  plugins: [openAPI()],
+  plugins: [openAPI(), lastLoginMethod()],
   appName: API.name,
   basePath: '/v1/auth',
   baseURL: env.BETTER_AUTH_URL,
@@ -31,6 +31,9 @@ export const auth = betterAuth({
     },
   },
   user: {
+    deleteUser: {
+      enabled: true,
+    },
     additionalFields: {
       countryCode: {
         type: 'string',

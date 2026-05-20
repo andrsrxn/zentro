@@ -19,10 +19,10 @@ export const AppProviders = ({ children }: { children: ReactNode }) => {
   }, [])
 
   return (
-    <QueryClientProvider>
-      <ThemeProvider>
+    <ThemeProvider>
+      <QueryClientProvider>
         <TooltipProvider>{children}</TooltipProvider>
-      </ThemeProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   )
 }

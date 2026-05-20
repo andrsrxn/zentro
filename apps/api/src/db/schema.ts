@@ -1,7 +1,7 @@
 import { createId } from '@paralleldrive/cuid2'
 import { AUTH, type AuthProvider } from '@zentro/constants/auth'
 import type { CountryCode, TimeZone } from '@zentro/constants/countries'
-import type { NoteBackgroundColor } from '@zentro/constants/notes'
+import { NOTES, type NoteBackgroundColor } from '@zentro/constants/notes'
 import { USERS, type UserRole, type UserState } from '@zentro/constants/users'
 import { relations } from 'drizzle-orm'
 import { index, pgEnum, pgTable, timestamp, varchar } from 'drizzle-orm/pg-core'
@@ -23,7 +23,6 @@ const updatedAt = timestamp(timestampConfig)
   .$onUpdateFn(() => new Date())
   .defaultNow()
   .notNull()
-// const consecutiveId = integer().generatedAlwaysAsIdentity().notNull()
 export const generateUniqueId = () =>
   varchar('id', { length: 256 })
     .$defaultFn(() => createId())
@@ -96,20 +95,33 @@ export const verifications = pgTable(
   table => [index('verifications_identifier_idx').on(table.identifier)]
 )
 
-export const notes = pgTable('notes', t => ({
-  id: generateUniqueId(),
-  title: t.varchar({ length: 100 }).notNull(),
-  content: t.text(),
-  color: t.varchar({ length: 7 }).$type<NoteBackgroundColor>().notNull(),
-  positionX: t.integer().default(0).notNull(),
-  positionY: t.integer().default(0).notNull(),
-  userId: t
-    .text()
-    .notNull()
-    .references(() => users.id, { onDelete: 'cascade' }),
-  createdAt,
-  updatedAt,
-}))
+export const notes = pgTable(
+  'notes',
+  t => ({
+    id: generateUniqueId(),
+    title: t.varchar({ length: 100 }).notNull(),
+    content: t.text(),
+    color: t
+      .varchar({ length: 7 })
+      .$type<NoteBackgroundColor>()
+      .default(NOTES.defaultNoteColor.background)
+      .notNull(),
+    positionX: t.integer().default(0).notNull(),
+    positionY: t.integer().default(0).notNull(),
+    order: t
+      .numeric({ precision: 100, scale: 20, mode: 'number' })
+      .unique()
+      .notNull()
+      .default(NOTES.orderStep),
+    userId: t
+      .text()
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    createdAt,
+    updatedAt,
+  }),
+  table => [index('notes_order_idx').on(table.order.desc())]
+)
 
 export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
@@ -137,54 +149,3 @@ export const notesRelations = relations(notes, ({ one }) => ({
     references: [users.id],
   }),
 }))
-
-// export const users = pgTable(
-//   'users',
-//   t => ({
-//     id: consecutiveId,
-//     userId: uniqueId.primaryKey(),
-//     firstName: t.varchar({ length: 50 }).notNull(),
-//     lastName: t.varchar({ length: 50 }),
-//     email: t.varchar({ length: 256 }).unique().notNull(),
-//     password: t.text(),
-//     authProvider: authProviderEnum().$type<AuthProvider>().notNull(),
-//     avatarUrl: t.text(),
-//     countryCode: t.varchar({ length: 2 }),
-//     timeZone: t.varchar({ length: 50 }).notNull().default('UTC'),
-//     lastSignInAt: t.timestamp(timestampConfig).notNull(),
-//     state: userStateEnum().$type<UserState>().default(USERS.state.active).notNull(),
-//     role: userRoleEnum().$type<UserRole>().default(USERS.role.user).notNull(),
-//     createdAt,
-//     updatedAt,
-//   }),
-//   table => [
-//     check(
-//       'password_and_provider_check',
-//       sql`(${table.authProvider} = 'local' AND ${table.password} IS NOT NULL) OR (${table.authProvider} != 'local' AND ${table.password} IS NULL)`
-//     ),
-//   ]
-// )
-
-// export const notes = pgTable('notes', t => ({
-//   id: consecutiveId,
-//   noteId: uniqueId.primaryKey(),
-//   title: t.text().notNull(),
-//   content: t.text().notNull(),
-//   userId: t.varchar({ length: 256 }).references(() => users.userId, {
-//     onDelete: 'cascade',
-//   }),
-//   createdAt,
-//   updatedAt,
-// }))
-
-// // Relations
-// export const userRelations = relations(users, ({ many }) => ({
-//   notes: many(notes),
-// }))
-
-// export const notesRelations = relations(notes, ({ one }) => ({
-//   user: one(users, {
-//     fields: [notes.userId],
-//     references: [users.userId],
-//   }),
-// }))

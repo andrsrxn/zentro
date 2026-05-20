@@ -8,6 +8,11 @@ export const getCsrfToken = (): string | null => {
   return match?.[1] ?? null
 }
 
+export const deleteCsrfToken = () => {
+  // biome-ignore lint/suspicious/noDocumentCookie: client cookie deletion
+  document.cookie = `${CSRF_COOKIE}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/`
+}
+
 export const ensureCsrfToken = async () => {
   if (getCsrfToken()) {
     return

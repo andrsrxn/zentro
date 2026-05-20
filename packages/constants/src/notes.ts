@@ -5,9 +5,17 @@ export const NOTES = {
   cacheTime: {
     minutes: 5,
   },
+  orderStep: 1000,
   tags: {
     all: () => ['notes'],
     single: (id: string) => ['notes', `note-${id}`],
+  },
+  defaultNoteColor: {
+    background: '#FFD700',
+    foreground: '#3D2E00',
+  },
+  limits: {
+    maxNotes: 30,
   },
   colors: {
     yellow: { background: '#FFD700', foreground: '#3D2E00' },
@@ -38,6 +46,10 @@ export const NOTES = {
       ...HTTP_ERRORS.notFound,
       message: 'Note not found',
     },
+    maxNotesReached: {
+      ...HTTP_ERRORS.badRequest,
+      message: 'Maximum number of notes reached',
+    },
     default: {
       ...HTTP_ERRORS.internalError,
       message: 'Could not load notes',
@@ -64,6 +76,14 @@ export const NOTES = {
       ...HTTP_ERRORS.internalError,
       message: 'Failed to update note',
     },
+    invalidOrder: {
+      ...HTTP_ERRORS.badRequest,
+      message: 'Invalid note order',
+    },
+    updateOrderFailed: {
+      ...HTTP_ERRORS.internalError,
+      message: 'Failed to update note order',
+    },
 
     deleteFailed: {
       ...HTTP_ERRORS.internalError,
@@ -85,6 +105,7 @@ export interface Note {
   color: NoteBackgroundColor
   positionX: number
   positionY: number
+  order: number
   userId: string
   createdAt: Date
   updatedAt: Date

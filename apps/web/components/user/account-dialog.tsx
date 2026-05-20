@@ -66,7 +66,7 @@ export const AccountDialog = () => {
   const setAccountDialogOpen = useUserStore(state => state.setAccountDialogOpen)
   const [isConfirmOpen, confirm, handleConfirm, handleCancel] = useConfirm()
   const [isDeleting, setIsDeleting] = useState(false)
-  const router = useRouter()
+  const { refresh } = useRouter()
 
   const session = authClient.useSession()
   if (!session.data) {
@@ -134,7 +134,7 @@ export const AccountDialog = () => {
               <span className='flex items-center gap-2'>
                 <IconClock className='size-4' />
                 <span className='text-muted-foreground'>Since:</span>
-                <span className='font-medium'>
+                <span className='font-medium' suppressHydrationWarning>
                   {formatDate({
                     date: new Date(session.data.user.createdAt),
                     includeWeekDay: true,
@@ -169,7 +169,7 @@ export const AccountDialog = () => {
                       if (res.data?.success) {
                         deleteCsrfToken()
 
-                        router.refresh()
+                        refresh()
                         authClient.clearLastUsedLoginMethod()
                       }
                     }

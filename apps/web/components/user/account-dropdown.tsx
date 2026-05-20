@@ -36,7 +36,7 @@ export const AccountDropdown = ({
   countryCode: string
 } & ComponentProps<typeof DropdownMenu>) => {
   const [isLoading, setIsLoading] = useState(false)
-  const router = useRouter()
+  const { refresh } = useRouter()
   const setShortcutsDialogOpen = useSharedStore(state => state.setShortcutsDialogOpen)
   const setAccountDialogOpen = useUserStore(state => state.setAccountDialogOpen)
   const { resolvedTheme, setTheme } = useTheme()
@@ -45,7 +45,7 @@ export const AccountDropdown = ({
     setIsLoading(true)
     const res = await signOut()
     if (res.data?.success) {
-      router.refresh()
+      refresh()
     }
   }
   return (

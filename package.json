@@ -17,7 +17,7 @@
     "typecheck": "turbo run typecheck && echo Typecheck finished",
     "typecoverage": "pnpm dlx type-coverage -at-least=99 && echo Typecoverage finished.",
     "depcheck": "pnpm dlx knip && echo Depcheck finished.",
-    "doctor": "pnpm dlx react-doctor@latest . && echo Doctor finished.",
+    "doctorcheck": "pnpm dlx react-doctor@latest . --verbose && echo Doctor finished.",
     "db:generate": "turbo run db:generate && echo DB Generate finished",
     "db:migrate": "turbo run db:migrate && echo DB Migrate finished",
     "db:push": "turbo run db:push && echo DB Push finished",

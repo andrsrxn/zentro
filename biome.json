@@ -7,6 +7,7 @@
     "includes": [
       "**",
       "!**/dist",
+      "!**/dist-types",
       "!**/.turbo",
       "!**/.next",
       "!**/*.mjs",

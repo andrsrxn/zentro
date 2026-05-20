@@ -15,9 +15,11 @@ A fast, modern notes application that helps you stay organized.
 - Drizzle ORM
 - Tailwind CSS
 - Shadcn UI
+- Dnd-kit
 - Hono RPC
 - Tanstack Query
 - Better Auth
+- Vitest
 - Turborepo
 - Vercel
 
@@ -32,6 +34,7 @@ A fast, modern notes application that helps you stay organized.
 
 - @zentro/constants
 - @zentro/utils
+- @zentro/schemas
 - @zentro/ts-config
 - @zentro/tsdown-config
 - @zentro/vitest-config

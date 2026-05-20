@@ -3,7 +3,6 @@
 # Zentro | Notes App
 
 A fast, modern notes application that helps you stay organized.
-(Still in development...)
 
 ## Tech Stack
 
@@ -27,8 +26,8 @@ A fast, modern notes application that helps you stay organized.
 
 ### Apps
 
-- api
-- web
+- Api
+- Web
 
 ### Packages
 

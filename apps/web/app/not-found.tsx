@@ -26,7 +26,7 @@ export default function NotFound() {
         <EmptyContent>
           <Button variant='link' asChild>
             <Link href='/'>
-              Go to Dashboard <IconArrowRight />
+              Go to Home <IconArrowRight />
             </Link>
           </Button>
         </EmptyContent>

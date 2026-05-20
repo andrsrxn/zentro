@@ -1,7 +1,7 @@
 'use client'
 
 import { cva, type VariantProps } from 'class-variance-authority'
-import { useMemo } from 'react'
+import { memo, useMemo } from 'react'
 
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
@@ -163,6 +163,24 @@ function FieldSeparator({
   )
 }
 
+const FieldErrorList = memo(function FieldErrorList({
+  messages,
+}: {
+  messages: string[]
+}) {
+  if (messages.length === 1) {
+    return messages[0]
+  }
+
+  return (
+    <ul className='ml-4 flex list-disc flex-col gap-1'>
+      {messages.map((message) => (
+        <li key={message}>{message}</li>
+      ))}
+    </ul>
+  )
+})
+
 function FieldError({
   className,
   children,
@@ -171,30 +189,20 @@ function FieldError({
 }: React.ComponentProps<'div'> & {
   errors?: Array<{ message?: string } | undefined>
 }) {
-  const content = useMemo(() => {
-    if (children) {
-      return children
+  const messages = useMemo(() => {
+    if (!errors) return []
+    const seen = new Set<string>()
+    const result: string[] = []
+    for (const error of errors) {
+      if (error?.message && !seen.has(error.message)) {
+        seen.add(error.message)
+        result.push(error.message)
+      }
     }
+    return result
+  }, [errors])
 
-    if (errors === undefined || errors?.length === 0) {
-      return null
-    }
-
-    const uniqueErrors = [...new Map(errors.map(error => [error?.message, error])).values()]
-
-    if (uniqueErrors?.length === 1) {
-      return uniqueErrors[0]?.message
-    }
-
-    return (
-      <ul className='ml-4 flex list-disc flex-col gap-1'>
-        {/** biome-ignore lint/suspicious/noArrayIndexKey: not dynamic */}
-        {uniqueErrors.map((error, index) => error?.message && <li key={index}>{error.message}</li>)}
-      </ul>
-    )
-  }, [children, errors])
-
-  if (!content) {
+  if (!children && messages.length === 0) {
     return null
   }
 
@@ -204,7 +212,7 @@ function FieldError({
       data-slot='field-error'
       className={cn('text-destructive text-sm font-normal', className)}
       {...props}>
-      {content}
+      {children || <FieldErrorList messages={messages} />}
     </div>
   )
 }

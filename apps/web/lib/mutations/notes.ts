@@ -1,6 +1,6 @@
 import { HEADERS } from '@zentro/constants/headers'
 import { NOTES } from '@zentro/constants/notes'
-import type { CreateNoteInput, UpdateNoteInput } from '@zentro/schemas/notes'
+import type { CreateNoteInput, UpdateNoteInput, UpdateNoteOrderInput } from '@zentro/schemas/notes'
 import { apiClient, rpc } from '@/lib/services/api-client'
 import { getCsrfToken } from '@/lib/utils/csrf'
 
@@ -25,6 +25,18 @@ export const updateNote = ({ id, input }: { id: string; input: UpdateNoteInput }
       { headers: { [HEADERS.csrf]: csrfToken ?? '' } }
     ),
     error: NOTES.errors.updateFailed,
+  })
+}
+
+export const updateNoteOrder = ({ id, input }: { id: string; input: UpdateNoteOrderInput }) => {
+  const csrfToken = getCsrfToken()
+
+  return rpc({
+    request: apiClient.notes[':id'].order.$patch(
+      { param: { id }, json: input },
+      { headers: { [HEADERS.csrf]: csrfToken ?? '' } }
+    ),
+    error: NOTES.errors.updateOrderFailed,
   })
 }
 

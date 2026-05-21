@@ -1,9 +1,9 @@
 'use client'
 
 import { useHotkey } from '@tanstack/react-hotkeys'
+import { useTheme } from '@teispace/next-themes'
 import { COMPANY } from '@zentro/constants/company'
 import confetti from 'canvas-confetti'
-import { useTheme } from 'next-themes'
 import { useNotesStore } from '@/lib/store/notes'
 import { useSharedStore } from '@/lib/store/shared'
 import { useUserStore } from '@/lib/store/user'
@@ -37,6 +37,8 @@ export const HotKeys = () => {
   })
 
   useHotkey('D', () => {
+    console.log({ resolvedTheme })
+
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
   })
 

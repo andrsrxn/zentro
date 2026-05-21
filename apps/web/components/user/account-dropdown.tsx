@@ -1,9 +1,9 @@
 'use client'
 
 import { IconKeyboard, IconLogout2, IconMoon, IconSun, IconUser } from '@tabler/icons-react'
+import { useTheme } from '@teispace/next-themes'
 import type { CountryCode } from '@zentro/constants/countries'
 import { useRouter } from 'next/navigation'
-import { useTheme } from 'next-themes'
 import { type ComponentProps, useState } from 'react'
 import { HeaderCountryFlag } from '@/components/shared/country-flag'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'

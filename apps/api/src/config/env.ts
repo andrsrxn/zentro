@@ -13,7 +13,7 @@ const envSchema = z.object({
   DATABASE_URL: z.url(),
   WEB_URL: z.url(),
   NODE_ENV: z.enum(Object.values(NODE_ENV)),
-  DATABASE_URL_TEST: z.url(),
+  DATABASE_URL_TEST: z.url().optional(),
   BETTER_AUTH_SECRET: z.string(),
   BETTER_AUTH_URL: z.url(),
   GITHUB_CLIENT_ID: z.string(),

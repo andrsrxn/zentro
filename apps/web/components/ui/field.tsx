@@ -163,18 +163,14 @@ function FieldSeparator({
   )
 }
 
-const FieldErrorList = memo(function FieldErrorList({
-  messages,
-}: {
-  messages: string[]
-}) {
+const FieldErrorList = memo(function FieldErrorList({ messages }: { messages: string[] }) {
   if (messages.length === 1) {
     return messages[0]
   }
 
   return (
     <ul className='ml-4 flex list-disc flex-col gap-1'>
-      {messages.map((message) => (
+      {messages.map(message => (
         <li key={message}>{message}</li>
       ))}
     </ul>
@@ -190,7 +186,9 @@ function FieldError({
   errors?: Array<{ message?: string } | undefined>
 }) {
   const messages = useMemo(() => {
-    if (!errors) return []
+    if (!errors) {
+      return []
+    }
     const seen = new Set<string>()
     const result: string[] = []
     for (const error of errors) {

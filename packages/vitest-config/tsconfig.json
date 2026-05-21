@@ -1,5 +1,5 @@
 {
   "extends": "@zentro/ts-config/no-build",
   "include": ["src/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": [".turbo", "node_modules"]
 }

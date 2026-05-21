@@ -3,9 +3,6 @@
   "display": "Hono",
   "extends": "./base.json",
   "compilerOptions": {
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx"
   }

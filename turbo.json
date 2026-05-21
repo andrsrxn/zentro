@@ -2,16 +2,26 @@
   "$schema": "https://turborepo.dev/schema.json",
   "ui": "tui",
 
-  "globalDependencies": [".env", ".env.local", "tsconfig.json"],
+  "globalDependencies": [".env", "tsdown.config.ts", "tsconfig.json"],
 
-  "globalEnv": ["NODE_ENV", "DATABASE_URL"],
+  "globalEnv": [
+    "NODE_ENV",
+    "DATABASE_URL",
+    "PORT",
+    "BASE_URL",
+    "WEB_URL",
+    "NEXT_PUBLIC_BASE_URL",
+    "NEXT_PUBLIC_API_URL"
+  ],
   "tasks": {
     "build": {
-      "dependsOn": ["^typecheck", "^lint", "^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**", "dist-types/**"]
+      "dependsOn": ["^typecheck", "^lint", "^build", "typecheck", "lint"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "tsconfig.json", "tsdown.config.ts"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
     "build:types": {
+      "dependsOn": ["^build:types"],
+      "inputs": ["tsconfig.json"],
       "outputs": ["dist-types/**"]
     },
     "dev": {
@@ -20,11 +30,17 @@
     },
 
     "typecheck": {
+      "dependsOn": ["^build:types"],
       "outputs": []
     },
+    "start": {
+      "dependsOn": ["^build"]
+    },
     "test": {
-      "dependsOn": ["^test"],
-      "outputs": ["coverage/**"]
+      "dependsOn": ["^build:types"],
+      "outputs": ["coverage/**"],
+      "cache": false,
+      "persistent": true
     },
     "lint": {
       "dependsOn": ["^lint"],

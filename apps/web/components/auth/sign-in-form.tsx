@@ -1,7 +1,7 @@
 'use client'
 
 import { AUTH, type AuthProvider } from '@zentro/constants/auth'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { GitHubIcon } from '@/components/icons/github'
 import { GoogleIcon } from '@/components/icons/google'
 import { Badge } from '@/components/ui/badge'
@@ -23,9 +23,14 @@ export function SignInForm({
   const [isLoading, setIsLoading] = useState(false)
   const [selectedProvider, setSelectedProvider] = useState<AuthProvider | undefined>()
   const lastMethod = authClient.getLastUsedLoginMethod()
+  const [mounted, setMounted] = useState(false)
 
-  const wasGoogle = lastMethod === 'google'
-  const wasGithub = lastMethod === 'github'
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const wasGoogle = mounted && lastMethod === 'google'
+  const wasGithub = mounted && lastMethod === 'github'
   return (
     <form className={cn('flex flex-col gap-6', className)} {...props}>
       <FieldGroup>

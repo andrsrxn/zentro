@@ -4,6 +4,7 @@ const baseConfig = defineConfig({
   resolve: {
     tsconfigPaths: true,
   },
+
   test: {
     globals: true,
     passWithNoTests: true,
@@ -15,6 +16,8 @@ const baseConfig = defineConfig({
       exclude: [
         '**/node_modules/**',
         '**/dist/**',
+        '**/.turbo/**',
+        '**/.next/**',
         '**/*.config.*',
         '**/*.d.ts',
         '**/types/**',

@@ -19,6 +19,7 @@
     "resolveJsonModule": true,
     "noEmit": true,
     "strict": true,
+    "allowJs": true,
     "noUnusedLocals": true,
     "noImplicitAny": true,
     "noUnusedParameters": true,
@@ -26,6 +27,7 @@
     "strictNullChecks": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "noImplicitThis": true
+    "noImplicitThis": true,
+    "customConditions": ["development"]
   }
 }

@@ -1,9 +1,7 @@
 import tsdownConfig from '@zentro/tsdown-config'
 import { defineConfig } from 'tsdown'
 
-export const config = defineConfig({
+export default defineConfig({
   ...tsdownConfig,
-  entry: ['./src/index.ts'],
-  platform: 'node',
-  dts: false,
+  entry: ['./src/*.ts'],
 })

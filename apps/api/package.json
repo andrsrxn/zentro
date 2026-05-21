@@ -2,18 +2,18 @@
   "name": "api",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch --conditions=development src/index.ts",
     "lint": "biome check",
     "build:types": "tsc",
     "build": "tsdown",
     "typecheck": "tsc --noEmit -p tsconfig.json",
+    "start": "node dist/index.mjs",
     "test": "vitest",
     "db:generate": "drizzle-kit generate",
     "db:studio": "drizzle-kit studio",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "pnpm db:generate && pnpm db:migrate",
-    "db:auth:docs": "open-cli http://localhost:8000/v1/auth/reference ",
-    "start": "node dist/index.js"
+    "db:auth:docs": "open-cli http://localhost:8000/v1/auth/reference "
   },
   "dependencies": {
     "@hono/node-server": "1.19.14",

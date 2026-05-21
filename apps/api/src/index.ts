@@ -29,7 +29,7 @@ import v1Routes from '@/routes/v1/index'
 import { gracefulShutdown } from '@/utils/errors'
 import { logger } from '@/utils/logger'
 
-const app = new Hono({
+export const app = new Hono({
   strict: false,
 })
   .basePath('/')
@@ -113,7 +113,7 @@ const app = new Hono({
   )
   .use(requestLogger())
 
-const routes = app
+export const routes = app
   .route('/v1', v1Routes)
   .notFound(() => {
     throw new AppError(HTTP_ERRORS.notFound.statusCode, {

@@ -13,7 +13,9 @@ describe('errors', () => {
     it('normalizes an Error instance', () => {
       const error = new Error('Test error message')
       const result = normalizeCause(error)
-      expect(result).toEqual(error.toString())
+      expect(result).toEqual(
+        `Name: ${error.name}. Message: ${error.message}. Cause: ${error.cause}`
+      )
     })
 
     it('normalizes a string cause', () => {

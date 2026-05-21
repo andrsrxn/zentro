@@ -11,6 +11,7 @@
       "@/*": ["./src/*"]
     }
   },
+
   "include": [
     "src/**/*",
     "tsdown.config.ts",
@@ -18,5 +19,5 @@
     "tests/**/*.ts",
     "drizzle.config.ts"
   ],
-  "exclude": ["node_modules", "dist", "dist-types"]
+  "exclude": [".turbo", "node_modules", "dist", "dist-types"]
 }

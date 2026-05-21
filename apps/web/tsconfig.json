@@ -20,7 +20,7 @@
     "**/*.mts",
     "../../api/src/**/*"
   ],
-  "exclude": ["node_modules"],
+  "exclude": [".turbo", ".next", "node_modules"],
   "references": [
     {
       "path": "../api"

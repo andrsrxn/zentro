@@ -147,7 +147,7 @@ export const StickyNoteTitle = ({
     }
 
     const result = updateNoteSchema.safeParse({ title: value })
-    console.log({ result })
+
     if (!result.success) {
       toast.error(
         result.error.issues.map(issue => issue.message)[0] ?? NOTES.errors.updateFailed.message

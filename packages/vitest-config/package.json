@@ -24,6 +24,8 @@
     "@zentro/ts-config": "workspace:*",
     "@vitejs/plugin-react": "6.0.1",
     "@vitest/coverage-v8": "4.1.5",
+    "@zentro/tsdown-config": "workspace:*",
+    "tsdown": "0.21.10",
     "happy-dom": "20.9.0",
     "vitest": "4"
   }

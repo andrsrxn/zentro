@@ -4,10 +4,14 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   experimental: {
     staleTimes: {
-      static: 30,
-      dynamic: 60,
+      static: 300,
+      dynamic: 0,
     },
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  transpilePackages: ['@zentro/constants', '@zentro/schemas', '@zentro/utils'],
   typedRoutes: false,
   images: {
     unoptimized: true,

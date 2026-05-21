@@ -8,9 +8,7 @@ const nextConfig: NextConfig = {
       dynamic: 0,
     },
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+
   transpilePackages: ['@zentro/constants', '@zentro/schemas', '@zentro/utils'],
   typedRoutes: false,
   images: {

@@ -3,17 +3,12 @@
 
 import { serve } from '@hono/node-server'
 import { serveStatic } from '@hono/node-server/serve-static'
-import {
-  type ApiResponseError,
-  type ContentfulStatusCode,
-  TIMEOUT_REQUEST,
-} from '@zentro/constants/api'
+import { TIMEOUT_REQUEST } from '@zentro/constants/api'
 import { NODE_ENV } from '@zentro/constants/env'
 import { HTTP_ERRORS } from '@zentro/constants/errors'
 import { isDevelopmentEnv, isProductionEnv } from '@zentro/utils/env'
 import { AppError } from '@zentro/utils/errors'
 import { Hono } from 'hono'
-import type { ApplyGlobalResponse } from 'hono/client'
 import { compress } from 'hono/compress'
 import { logger as requestLogger } from 'hono/logger'
 import { secureHeaders } from 'hono/secure-headers'
@@ -149,12 +144,3 @@ process.on('uncaughtException', async error => {
 process.on('unhandledRejection', async error => {
   await gracefulShutdown(server, `Unhandled Rejection: ${String(error)}`)
 })
-
-// RPC to consumers
-export type AppType = typeof routes
-export type AppWithErrors = ApplyGlobalResponse<
-  typeof routes,
-  {
-    [Key in ContentfulStatusCode]: { json: ApiResponseError }
-  }
->

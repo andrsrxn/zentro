@@ -23,6 +23,7 @@
     "@zentro/constants": "workspace:*",
     "@zentro/schemas": "workspace:*",
     "@zentro/utils": "workspace:*",
+    "api": "workspace:*",
     "better-auth": "1.6.9",
     "canvas-confetti": "1.9.4",
     "class-variance-authority": "0.7.1",

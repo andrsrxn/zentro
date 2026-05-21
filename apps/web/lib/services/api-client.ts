@@ -1,8 +1,8 @@
 import { HTTP_ERRORS, type ResponseError } from '@zentro/constants/errors'
 import { AppError } from '@zentro/utils/errors'
+import type { AppWithErrors } from 'api/client'
 import { hc } from 'hono/client'
 import { envClient } from '@/lib/config/env-client'
-import type { AppWithErrors } from '../../../api/src/index'
 
 export const apiClient = hc<AppWithErrors>(envClient.NEXT_PUBLIC_API_URL, {
   init: {

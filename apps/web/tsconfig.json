@@ -17,8 +17,7 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "vitest.config.ts",
-    "**/*.mts",
-    "../../api/src/**/*"
+    "**/*.mts"
   ],
   "exclude": [".turbo", ".next", "node_modules"],
   "references": [

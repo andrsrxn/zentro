@@ -15,7 +15,7 @@
   ],
   "tasks": {
     "build": {
-      "dependsOn": ["^typecheck", "^lint", "^build", "typecheck", "lint"],
+      "dependsOn": ["^typecheck", "^lint", "^build:types", "^build", "typecheck", "lint"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", "tsconfig.json", "tsdown.config.ts"],
       "outputs": [".next/**", "!.next/cache/**", "dist/**"]
     },
@@ -25,6 +25,7 @@
       "outputs": ["dist-types/**"]
     },
     "dev": {
+      "dependsOn": ["^build:types"],
       "persistent": true,
       "cache": false
     },

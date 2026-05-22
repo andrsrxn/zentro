@@ -6,8 +6,10 @@ import * as z from 'zod'
 
 config()
 
+const DEFAULT_PORT = 8000
+
 const envSchema = z.object({
-  PORT: z.coerce.number(),
+  PORT: z.coerce.number().default(DEFAULT_PORT),
   BASE_URL: z.url(),
   DEV_IP: z.ipv4(),
   DATABASE_URL: z.url(),

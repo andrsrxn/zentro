@@ -6,7 +6,6 @@ const serverConfig = mergeConfig(
   defineConfig({
     test: {
       environment: 'node',
-      pool: 'threads',
     },
   })
 )

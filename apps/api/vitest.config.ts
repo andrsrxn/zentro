@@ -6,7 +6,7 @@ export default mergeConfig(
   defineConfig({
     test: {
       name: 'api',
-      setupFiles: ['./tests/setup.ts'],
+      setupFiles: ['./__tests__/setup.ts'],
     },
   })
 )

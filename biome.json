@@ -562,7 +562,7 @@
       }
     },
     {
-      "includes": ["**/env.ts", "**/env-client.ts", "**/tests/**"],
+      "includes": ["**/env.ts", "**/env-client.ts", "**/__tests__/**"],
       "linter": {
         "rules": {
           "correctness": {
@@ -575,7 +575,7 @@
       }
     },
     {
-      "includes": ["**/tests/**"],
+      "includes": ["**/__tests__/**"],
       "linter": {
         "rules": {
           "style": {

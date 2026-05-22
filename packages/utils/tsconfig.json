@@ -1,5 +1,5 @@
 {
   "extends": "@zentro/ts-config/no-build",
-  "include": ["src/**/*", "vitest.config.ts", "tests/**/*.test.ts"],
+  "include": ["src/**/*", "vitest.config.ts", "__tests__/**/*"],
   "exclude": [".turbo", "node_modules"]
 }

@@ -16,7 +16,7 @@
     "src/**/*",
     "tsdown.config.ts",
     "vitest.config.ts",
-    "tests/**/*.ts",
+    "__tests__/**/*.ts",
     "drizzle.config.ts"
   ],
   "exclude": [".turbo", "node_modules", "dist", "dist-types"]

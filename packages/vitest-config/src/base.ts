@@ -6,6 +6,7 @@ const baseConfig = defineConfig({
   },
 
   test: {
+    pool: 'typescript',
     globals: true,
     passWithNoTests: true,
     reporters: ['verbose'],

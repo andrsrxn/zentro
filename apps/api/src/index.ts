@@ -131,7 +131,7 @@ const server = serve(
   }
 )
 
-export default server
+export default app
 
 // graceful shutdown
 process.on('SIGINT', async err => {

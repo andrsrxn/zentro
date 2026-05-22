@@ -6,19 +6,20 @@ A fast, modern notes application that helps you stay organized.
 
 ## Tech Stack
 
-- Node.js
-- React
-- Next.js
-- TypeScript
-- PostgreSQL
+- Node.js 24
+- React 9
+- Next.js 16
+- TypeScript 5
+- PostgreSQL 18
 - Drizzle ORM
-- Tailwind CSS
+- Tailwind CSS 4
 - Shadcn UI
 - Dnd-kit
 - Hono RPC
 - Tanstack Query
 - Better Auth
-- Vitest
+- Tsdown
+- Vitest 4
 - Turborepo
 - Vercel
 
@@ -37,3 +38,20 @@ A fast, modern notes application that helps you stay organized.
 - @zentro/ts-config
 - @zentro/tsdown-config
 - @zentro/vitest-config
+
+## Features
+
+- Drag and Drop interface for note reordering (Fractional Indexing) and deletion
+- Optimistic mutations with centralized error handling
+- Mobile responsive
+- Accessibility compliance
+- Dark/Light theme
+- Shorcuts for productivity and navigation
+- UI/UX designed to be fast and easy to use
+- Authentication with Github and Google
+- Protected routes, CSRF protection, recent session detection
+- Caching, revalidating and performance optimization
+- Unit Testing and Type Coverage (99%)
+- API versioning
+- Geolocation detection based on IP
+- Best modern development practices and patterns

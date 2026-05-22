@@ -28,6 +28,7 @@ export const app = new Hono({
   strict: false,
 })
   .basePath('/')
+  .get('/', ctx => ctx.redirect('/v1'))
   .use('/favicon.ico', serveStatic({ path: './public/favicon.ico' }))
   .use(
     customCors({

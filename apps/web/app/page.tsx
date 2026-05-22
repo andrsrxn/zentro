@@ -45,12 +45,14 @@ export default async function Home() {
             <p className='text-muted-foreground mx-auto w-11/12 text-center text-sm text-pretty'>
               By continuing, you agree to our{' '}
               <Link
+                prefetch={false}
                 href='/terms'
                 className='hover:text-primary underline decoration-1 underline-offset-2'>
                 Terms of Service
               </Link>{' '}
               and{' '}
               <Link
+                prefetch={false}
                 href='/privacy-policy'
                 className='hover:text-primary underline decoration-1 underline-offset-2'>
                 Privacy Policy

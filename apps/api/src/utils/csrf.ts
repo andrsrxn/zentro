@@ -29,8 +29,9 @@ export const ensureCsrfCookie = (c: Context): string => {
     httpOnly: false,
     secure: isProductionEnv(env.NODE_ENV),
     maxAge: COOKIES.csrf.maxAge,
-    sameSite: 'Strict',
+    sameSite: 'Lax',
     path: '/',
+    domain: isProductionEnv(env.NODE_ENV) ? '.andrsrxn.com' : undefined,
   })
 
   return token

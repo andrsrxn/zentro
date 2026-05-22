@@ -1,4 +1,6 @@
 /** biome-ignore-all lint/performance/noNamespaceImport: one single object */
+
+import { isProductionEnv } from '@zentro/utils/env'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { betterAuth } from 'better-auth/minimal'
 import { lastLoginMethod, openAPI } from 'better-auth/plugins'
@@ -19,7 +21,12 @@ export const auth = betterAuth({
     usePlural: true,
     schema,
   }),
-
+  advanced: {
+    crossSubDomainCookies: {
+      enabled: isProductionEnv(env.NODE_ENV),
+      domain: 'andrsrxn.com',
+    },
+  },
   plugins: [openAPI(), lastLoginMethod()],
   appName: API.name,
   basePath: '/v1/auth',
@@ -30,6 +37,7 @@ export const auth = betterAuth({
       maxAge: CACHE_MINUTES * 60,
     },
   },
+
   user: {
     deleteUser: {
       enabled: true,

@@ -4,6 +4,7 @@ export const COOKIE_OPTIONS = {
   sameSite: 'Lax',
   path: '/',
   secure: true,
+  domain: 'andrsrxn.com',
 }
 
 export const COOKIES = {

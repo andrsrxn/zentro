@@ -11,6 +11,7 @@ import { db } from '@/db/drizzle'
 import * as schema from '@/db/schema'
 import { getGeolocation } from '@/utils/geolocation'
 import { getIP } from '@/utils/headers'
+import { COOKIE_OPTIONS } from '@zentro/constants/cookies'
 
 const CACHE_MINUTES = 5
 
@@ -24,7 +25,7 @@ export const auth = betterAuth({
   advanced: {
     crossSubDomainCookies: {
       enabled: isProductionEnv(env.NODE_ENV),
-      domain: 'andrsrxn.com',
+      domain: COOKIE_OPTIONS.domain,
     },
   },
   plugins: [openAPI(), lastLoginMethod()],

@@ -1,4 +1,4 @@
-import { COOKIES } from '@zentro/constants/cookies'
+import { COOKIE_OPTIONS, COOKIES } from '@zentro/constants/cookies'
 import { HEADERS } from '@zentro/constants/headers'
 import { isProductionEnv } from '@zentro/utils/env'
 import type { Context } from 'hono'
@@ -31,7 +31,7 @@ export const ensureCsrfCookie = (c: Context): string => {
     maxAge: COOKIES.csrf.maxAge,
     sameSite: 'Lax',
     path: '/',
-    domain: isProductionEnv(env.NODE_ENV) ? '.andrsrxn.com' : undefined,
+    domain: isProductionEnv(env.NODE_ENV) ? COOKIE_OPTIONS.domain : undefined,
   })
 
   return token

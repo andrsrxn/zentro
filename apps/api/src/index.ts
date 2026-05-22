@@ -131,6 +131,8 @@ const server = serve(
   }
 )
 
+export default server
+
 // graceful shutdown
 process.on('SIGINT', async err => {
   await gracefulShutdown(server, err)

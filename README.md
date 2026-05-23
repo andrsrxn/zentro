@@ -23,22 +23,6 @@ A fast, modern notes application that helps you stay organized.
 - Turborepo
 - Vercel
 
-## Monorepo
-
-### Apps
-
-- Api
-- Web
-
-### Packages
-
-- @zentro/constants
-- @zentro/utils
-- @zentro/schemas
-- @zentro/ts-config
-- @zentro/tsdown-config
-- @zentro/vitest-config
-
 ## Features
 
 - Drag and Drop interface for note reordering (Fractional Indexing) and deletion
@@ -55,3 +39,19 @@ A fast, modern notes application that helps you stay organized.
 - API versioning
 - Geolocation detection based on IP
 - Best modern development practices and patterns
+
+## Monorepo
+
+### Apps
+
+- Api
+- Web
+
+### Packages
+
+- @zentro/constants
+- @zentro/utils
+- @zentro/schemas
+- @zentro/ts-config
+- @zentro/tsdown-config
+- @zentro/vitest-config

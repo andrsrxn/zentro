@@ -48,12 +48,12 @@ export default async function Home() {
                 prefetch={false}
                 href='/terms'
                 className='hover:text-primary underline decoration-1 underline-offset-2'>
-                Terms of Service
+                Terms and Conditions
               </Link>{' '}
               and{' '}
               <Link
                 prefetch={false}
-                href='/privacy-policy'
+                href='/privacy'
                 className='hover:text-primary underline decoration-1 underline-offset-2'>
                 Privacy Policy
               </Link>

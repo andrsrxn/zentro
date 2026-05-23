@@ -13,7 +13,7 @@ export const formatDate = ({
   includeTime?: boolean
   timeZone?: TimeZone
 }) => {
-  const formatString = includeWeekDay ? 'EEEE, PPP' : 'PPP'
+  const formatString = includeWeekDay ? 'EEEE, PP' : 'PP'
   const timezonedDate = timeZone ? new TZDate(date.toString(), timeZone) : date
   const formatted = format(timezonedDate, includeTime ? `${formatString}p` : formatString)
   return formatted

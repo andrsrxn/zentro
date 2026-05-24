@@ -212,7 +212,7 @@ export const Notes = ({ className, ...props }: ComponentProps<'div'>) => {
         {...props}>
         {notes.map((note, index) => (
           <StickyNote
-            group='sticky-note'
+            group='notes'
             index={index}
             onDoubleClick={e => e.stopPropagation()}
             className={cn('min-h-28')}

@@ -112,9 +112,13 @@ export const NotesPanel = ({ children, className, ...props }: ComponentProps<'di
             return
           }
 
-          const { source } = event.operation
+          const { source, target } = event.operation
 
           if (!source?.id) {
+            return
+          }
+
+          if (target?.id === 'floating-bar' || target?.type === 'floating-bar') {
             return
           }
 

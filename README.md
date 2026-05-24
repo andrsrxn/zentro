@@ -32,11 +32,11 @@ A fast, modern notes application that helps you stay organized.
 - Drag and Drop interface for note reordering (Fractional Indexing) and deletion
 - Optimistic mutations with centralized error handling
 - Mobile responsive
-- Accessibility compliance
+- Accessibility compliance with full keyboard navigation and ARIA labels
 - Dark/Light theme
 - Shorcuts for productivity and navigation
 - UI/UX designed to be fast and easy to use
-- Authentication with Github and Google
+- Authentication with Github and Google with linked accounts
 - Protected routes, CSRF protection, recent session detection
 - Caching, revalidating and performance optimization
 - Unit Testing and Type Coverage (99%)

@@ -72,8 +72,13 @@ export const FloatingBar = () => {
 
   useDragDropMonitor({
     onDragStart: event => {
-      // only react to sticky-note type drags
-      if (event.operation.source?.type === 'sticky-note') {
+      const { source, activatorEvent } = event.operation
+
+      const isKeyboardDrag =
+        activatorEvent instanceof KeyboardEvent || activatorEvent?.type === 'keydown'
+
+      // avoid it on keyboard drags
+      if (source?.type === 'sticky-note' && !isKeyboardDrag) {
         setIsDraggingNote(true)
       }
     },

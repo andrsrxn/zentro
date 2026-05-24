@@ -44,7 +44,7 @@ export const baseMetadata: Metadata = {
     url: '/',
     images: [
       {
-        url: IMAGES.brand.banner.png,
+        url: IMAGES.brand.bannerOg.png,
         width: 1200,
         height: 630,
         alt: `Homepage of ${COMPANY.name} on laptop`,
@@ -58,7 +58,7 @@ export const baseMetadata: Metadata = {
     card: 'summary_large_image',
     title: COMPANY.name,
     description: COMPANY.description,
-    images: [IMAGES.brand.banner.png],
+    images: [IMAGES.brand.bannerOg.png],
   },
   category: 'productivity',
   classification: 'Business Application',

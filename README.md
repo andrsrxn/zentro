@@ -1,4 +1,8 @@
-![Zentro Banner](https://res.cloudinary.com/dq5nfyajn/image/upload/v1777566829/logo_olanwf.svg)
+<img 
+  src="https://res.cloudinary.com/dq5nfyajn/image/upload/w_800,q_auto,f_auto/v1779582458/symbol_a0gvnv.svg" 
+  alt="Zentro Symbol" 
+  width="60" 
+/>
 
 # Zentro | Notes App
 

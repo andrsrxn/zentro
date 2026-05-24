@@ -196,7 +196,7 @@ export const StickyNoteTitle = ({
       }}
       onClick={() => setIsEditing(true)}
       className={cn(
-        'font-handwritten line-clamp-2 w-10/12 cursor-text text-xl md:text-2xl',
+        'font-handwritten line-clamp-3 w-10/12 cursor-text text-xl md:text-2xl',
         isPending && 'pointer-events-none opacity-50',
         className
       )}>
@@ -355,7 +355,7 @@ export const StickyNoteContent = ({
         }}
         onClick={() => setIsEditing(true)}
         className={cn(
-          'block w-full cursor-text py-0.5 text-xs opacity-80 md:text-sm',
+          'line-clamp-4 block w-full cursor-text py-0.5 text-sm opacity-80',
           isPending && 'pointer-events-none opacity-50',
           (!value || value === '') && 'opacity-0 transition-opacity group-hover:opacity-50',
           className

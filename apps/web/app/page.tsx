@@ -29,7 +29,11 @@ export default async function Home() {
         <Card className='animate-in zoom-in-95 fade-in-0 w-full max-w-sm duration-500 ease-in-out'>
           <CardHeader>
             <div className='mb-1 flex w-full items-center justify-center'>
-              <img src={IMAGES.brand.logo.svg} alt={`${COMPANY.name} Logo`} className='size-12' />
+              <img
+                src={IMAGES.brand.symbol.svg}
+                alt={`${COMPANY.name} Symbol`}
+                className='size-12'
+              />
             </div>
             <CardTitle className='w-full text-center text-2xl font-bold'>
               Sign in to {COMPANY.name}
@@ -69,7 +73,7 @@ export default async function Home() {
       <header className='animate-in fade-in fixed top-0 left-0 z-50 w-full duration-500 ease-in-out'>
         <div className='wrapper bg-card m-4 flex h-11 max-w-3xl items-center justify-between rounded-full border px-3 shadow-xl/5'>
           <div className='flex h-full items-center gap-x-2'>
-            <img src={IMAGES.brand.logo.svg} alt={`${COMPANY.name} Logo`} className='size-6' />
+            <img src={IMAGES.brand.symbol.svg} alt={`${COMPANY.name} Symbol`} className='size-6' />
             <span className='text-lg font-bold'>{COMPANY.name}</span>
           </div>
           <div className='-mr-1 flex items-center gap-3'>

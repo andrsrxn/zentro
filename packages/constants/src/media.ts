@@ -6,6 +6,9 @@ export const IMAGES = {
     logo: {
       svg: 'https://res.cloudinary.com/dq5nfyajn/image/upload/v1779582458/logo_m4f7wq.svg',
     },
+    logoAlternative: {
+      svg: 'https://res.cloudinary.com/dq5nfyajn/image/upload/v1779582459/logo-alternative_okerpa.svg',
+    },
     symbol: {
       svg: 'https://res.cloudinary.com/dq5nfyajn/image/upload/v1779582458/symbol_a0gvnv.svg',
     },

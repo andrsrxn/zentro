@@ -1,7 +1,7 @@
 export const IMAGES = {
   brand: {
     bannerOg: {
-      png: 'https://res.cloudinary.com/dq5nfyajn/image/upload/v1779585561/banner-og_g7zdpa.png',
+      png: 'https://res.cloudinary.com/dq5nfyajn/image/upload/v1779723725/banner-og_i4d90b.png',
     },
     logo: {
       svg: 'https://res.cloudinary.com/dq5nfyajn/image/upload/v1779582458/logo_m4f7wq.svg',

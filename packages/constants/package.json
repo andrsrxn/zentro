@@ -86,6 +86,6 @@
   "devDependencies": {
     "@zentro/ts-config": "workspace:*",
     "@zentro/tsdown-config": "workspace:*",
-    "tsdown": "0.21.10"
+    "tsdown": "0.22.0"
   }
 }

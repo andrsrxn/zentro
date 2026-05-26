@@ -1,18 +1,19 @@
 import { NODE_ENV } from '@zentro/constants/env'
 import { env } from '@/config/env'
 
-const parseIPV6Regex = /for="?\[([^\]]+)\]"?/i
-const parseIPV4Regex = /for="?([^;,"\s\]]+)"?/i
+const parseIPV6Regex = /for="?\[(?<ip>[^\]]+)\]"?/iu
+
+const parseIPV4Regex = /for="?(?<ip>[^;,"\s\]]+)"?/iu
 
 function parseForwardedHeader(value: string): string | null {
   // IPv6: for=[2001:db8::1] or for="[2001:db8::1]"
-  const ipv6 = value.match(parseIPV6Regex)?.[1]
+  const ipv6 = parseIPV6Regex.exec(value)?.groups?.ip
   if (ipv6) {
     return ipv6
   }
 
   // IPv4 / hostname: for=1.2.3.4 or for="1.2.3.4"
-  const ipv4 = value.match(parseIPV4Regex)?.[1]
+  const ipv4 = parseIPV4Regex.exec(value)?.groups?.ip
   return ipv4 ?? null
 }
 

@@ -109,7 +109,7 @@ export function CreateNoteForm({
 
       queryClient.setQueryData(NOTES.tags.single(normalizedNote.id), normalizedNote)
 
-      const noteElement = document.getElementById(normalizedNote.id)
+      const noteElement = document.querySelector(`#${normalizedNote.id}`)
       if (noteElement) {
         noteElement.scrollIntoView({
           behavior: 'smooth',

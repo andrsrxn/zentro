@@ -37,7 +37,7 @@ export default function proxy(request: NextRequest) {
   }
 
   const cspHeader = `${cspHeaderParts.join('; ')};`
-  const contentSecurityPolicyHeaderValue = cspHeader.replace(/\s{2,}/g, ' ').trim()
+  const contentSecurityPolicyHeaderValue = cspHeader.replace(/\s{2,}/gu, ' ').trim()
 
   const response = NextResponse.next({
     request: {

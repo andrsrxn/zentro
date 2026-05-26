@@ -24,7 +24,7 @@ import v1Routes from '@/routes/v1/index'
 import { gracefulShutdown } from '@/utils/errors'
 import { logger } from '@/utils/logger'
 
-export const app = new Hono({
+const app = new Hono({
   strict: false,
 })
   .basePath('/')

@@ -35,9 +35,8 @@ describe('createNoteSchema', () => {
     }
     const result = createNoteSchema.safeParse(invalidNote)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe('Add the note title')
-    }
+
+    expect(result.error?.issues[0]?.message).toBe('Add the note title')
   })
 
   it('should validate note without content', () => {
@@ -60,9 +59,8 @@ describe('createNoteSchema', () => {
     }
     const result = createNoteSchema.safeParse(invalidNote)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe('Max of 100 characters')
-    }
+
+    expect(result.error?.issues[0]?.message).toBe('Max of 100 characters')
   })
 
   it('should invalidate content longer than 500 characters', () => {
@@ -75,9 +73,8 @@ describe('createNoteSchema', () => {
     }
     const result = createNoteSchema.safeParse(invalidNote)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe('Max of 500 characters')
-    }
+
+    expect(result.error?.issues[0]?.message).toBe('Max of 500 characters')
   })
 
   it('should invalidate invalid color', () => {
@@ -89,9 +86,8 @@ describe('createNoteSchema', () => {
     }
     const result = createNoteSchema.safeParse(invalidNote)
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe('Invalid note color')
-    }
+
+    expect(result.error?.issues[0]?.message).toBe('Invalid note color')
   })
 
   it('should invalidate missing position', () => {
@@ -141,9 +137,8 @@ describe('updateNoteOrderSchema', () => {
   it('should invalidate negative toIndex', () => {
     const result = updateNoteOrderSchema.safeParse({ toIndex: -1 })
     expect(result.success).toBe(false)
-    if (!result.success) {
-      expect(result.error.issues[0]?.message).toBe('Invalid order number')
-    }
+
+    expect(result.error?.issues[0]?.message).toBe('Invalid order number')
   })
 
   it('should invalidate missing toIndex', () => {

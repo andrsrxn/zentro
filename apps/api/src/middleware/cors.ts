@@ -31,6 +31,7 @@ export const customCors = (options: CORSOptions) => {
         throw new AppError(ERRORS.api.cors.statusCode, {
           message: ERRORS.api.cors.message,
           type: ERRORS.api.cors.type,
+          cause: e,
         })
       }
 

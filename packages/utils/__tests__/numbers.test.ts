@@ -20,7 +20,7 @@ describe('numbers', () => {
   describe('formatNumber', () => {
     it('formats a decimal number correctly', () => {
       expect(formatNumber(DECIMAL_NUMBER, { locale: 'en-US' })).toBe('1,234.56')
-      expect(formatNumber(DECIMAL_NUMBER, { locale: 'de-DE' })).toMatch(/1\.234,56|1.234,56/)
+      expect(formatNumber(DECIMAL_NUMBER, { locale: 'de-DE' })).toMatch(/1\.234,56|1.234,56/u)
     })
 
     it('handles invalid numbers by treating them as 0', () => {

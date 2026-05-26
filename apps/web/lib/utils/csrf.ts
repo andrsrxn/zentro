@@ -4,7 +4,7 @@ import { apiClient } from '@/lib/services/api-client'
 const CSRF_COOKIE = COOKIES.csrf.name
 
 export const getCsrfToken = (): string | null => {
-  const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${CSRF_COOKIE}=([^;]+)`))
+  const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${CSRF_COOKIE}=([^;]+)`, 'u'))
   return match?.[1] ?? null
 }
 
@@ -20,7 +20,5 @@ export const ensureCsrfToken = async () => {
 
   try {
     await apiClient.csrf.$get()
-  } catch {
-    return
-  }
+  } catch {}
 }

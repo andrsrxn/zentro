@@ -102,15 +102,12 @@
   }
 
   html {
-    @apply overscroll-contain scroll-smooth text-[100%] antialiased;
+    @apply scrollbar-gutter-stable overscroll-contain scroll-smooth text-[100%] antialiased;
   }
 
   body,
   * {
     scrollbar-width: thin;
-  }
-  html {
-    scrollbar-gutter: stable;
   }
 
   img,
@@ -198,12 +195,14 @@
 }
 
 @utility no-password-icon {
+  /* biome-ignore lint/nursery/noDuplicateSelectors: Not the same utility */
   &::-ms-clear {
     display: none;
     width: 0;
     height: 0;
   }
 
+  /* biome-ignore lint/nursery/noDuplicateSelectors: Not the same utility */
   &::-ms-reveal {
     display: none;
     width: 0;

@@ -32,6 +32,7 @@ export const customCsrf = (options: CSRFOptions) => {
         throw new AppError(ERRORS.api.csrfOrigin.statusCode, {
           message: ERRORS.api.csrfOrigin.message,
           type: ERRORS.api.csrfOrigin.type,
+          cause: e,
         })
       }
       throw AppError.from(e, {

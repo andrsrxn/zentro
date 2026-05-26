@@ -16,7 +16,7 @@ describe('dates', () => {
       const result = formatDate({ date, includeWeekDay: true })
       expect(typeof result).toBe('string')
       // Note: Locale dependent, but we know it should have weekday format
-      expect(result).toMatch(/Monday|Lunes/i) // Depending on machine locale, but at least it formats it
+      expect(result).toMatch(/Monday|Lunes/iu) // Depending on machine locale, but at least it formats it
     })
 
     it('includes time when requested', () => {

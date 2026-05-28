@@ -5,7 +5,9 @@ import {
   QueryClient,
   QueryClientProvider as QueryClientProviderRQ,
 } from '@tanstack/react-query'
+import { HTTP_ERRORS } from '@zentro/constants/errors'
 import type { AppError } from '@zentro/utils/errors'
+import { QUERIES } from '@/lib/constants/queries'
 
 declare module '@tanstack/react-query' {
   interface Register {
@@ -17,8 +19,13 @@ function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        // biome-ignore lint/style/noMagicNumbers: default time
-        staleTime: 5 * 60 * 1000,
+        staleTime: QUERIES.staleTime,
+        retry: (failureCount, error) => {
+          if (error.statusCode === HTTP_ERRORS.notFound.statusCode) {
+            return false
+          }
+          return failureCount < QUERIES.maxRetries
+        },
       },
     },
   })

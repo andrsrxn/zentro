@@ -27,6 +27,6 @@
     "@zentro/tsdown-config": "workspace:*",
     "tsdown": "0.22.0",
     "happy-dom": "20.9.0",
-    "vitest": "4"
+    "vitest": "4.1.7"
   }
 }

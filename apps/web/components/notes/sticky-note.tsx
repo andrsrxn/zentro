@@ -2,16 +2,14 @@
 'use client'
 
 import { useSortable } from '@dnd-kit/react/sortable'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { TimeZone } from '@zentro/constants/countries'
 import { NOTES, type Note, type NoteBackgroundColor } from '@zentro/constants/notes'
-import { type UpdateNoteInput, updateNoteSchema } from '@zentro/schemas/notes'
+import { updateNoteSchema } from '@zentro/schemas/notes'
 import { formatDate } from '@zentro/utils/dates'
-import { type ComponentProps, useRef, useState } from 'react'
+import { type ComponentProps, useRef } from 'react'
 import { toast } from 'sonner'
-import { Input } from '@/components/ui/input'
 import { Separator } from '@/components/ui/separator'
-import { updateNote } from '@/lib/mutations/notes'
+import { useUpdateNote } from '@/lib/hooks/use-notes'
 import { getNoteForegroundColor } from '@/lib/utils/notes'
 import { cn } from '@/lib/utils/theme'
 
@@ -26,6 +24,7 @@ export const StickyNote = ({
 }: Omit<ComponentProps<'div'>, 'color'> &
   Pick<Note, 'color' | 'id'> & { index: number; group: string }) => {
   const fgColor = getNoteForegroundColor(color)
+
   const { ref, isDragging } = useSortable({
     accept: ['sticky-note', 'floating-bar'],
     type: 'sticky-note',
@@ -42,6 +41,7 @@ export const StickyNote = ({
       className={cn(
         'group focus-visible:ring-ring/50 relative flex h-fit min-h-36 cursor-grab flex-col gap-2 rounded-xs border p-4 shadow-md duration-300 ease-in-out focus-visible:ring-3 focus-visible:outline-0',
         isDragging && 'opacity-60',
+
         className
       )}
       style={{ backgroundColor: color, color: fgColor }}>
@@ -50,319 +50,182 @@ export const StickyNote = ({
   )
 }
 
-// biome-ignore lint/complexity/noExcessiveLinesPerFunction: temporal
 export const StickyNoteTitle = ({
   children,
   className,
   color,
   noteId,
-}: ComponentProps<'h3'> & {
-  isEditing?: boolean
+}: ComponentProps<'textarea'> & {
   color: NoteBackgroundColor
-  onEditingChange?: (isEditing: boolean) => void
   children: string
   noteId: string
 }) => {
-  const [isEditing, setIsEditing] = useState(false)
-  const [value, setValue] = useState(children)
-  const initialValueRef = useRef(children)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+  const initialValueRef = useRef(children.trim())
   const fgColor = getNoteForegroundColor(color)
-  const queryClient = useQueryClient()
+  const { mutate: updateNote, isPending } = useUpdateNote()
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: (input: UpdateNoteInput) => updateNote({ id: noteId, input }),
-    onMutate: async newNoteInput => {
-      await Promise.all([
-        queryClient.cancelQueries({ queryKey: NOTES.tags.all() }),
-        queryClient.cancelQueries({ queryKey: NOTES.tags.single(noteId) }),
-      ])
+  const handleSave = (value: string) => {
+    const trimmed = value.trim()
 
-      const previousNotes = queryClient.getQueryData<Note[]>(NOTES.tags.all())
-      const previousNote = queryClient.getQueryData<Note>(NOTES.tags.single(noteId))
-
-      queryClient.setQueryData<Note[]>(NOTES.tags.all(), old => {
-        return old
-          ? old.map(note => (note.id === noteId ? { ...note, ...newNoteInput } : note))
-          : old
-      })
-
-      queryClient.setQueryData<Note>(NOTES.tags.single(noteId), old => {
-        return old ? { ...old, ...newNoteInput } : old
-      })
-
-      return { previousNotes, previousNote }
-    },
-
-    onSuccess: updatedNote => {
-      // reconcile with real server data instead of invalidate and refetch
-      if (!updatedNote) {
-        return
+    if (trimmed === initialValueRef.current) {
+      if (inputRef.current) {
+        inputRef.current.value = initialValueRef.current.trim()
       }
-
-      queryClient.setQueryData<Note>(NOTES.tags.single(noteId), {
-        ...updatedNote,
-        createdAt: new Date(updatedNote.createdAt),
-        updatedAt: new Date(updatedNote.updatedAt),
-      })
-
-      queryClient.setQueryData<Note[]>(NOTES.tags.all(), old => {
-        if (!old) {
-          return old
-        }
-
-        return old.map(note =>
-          note.id === noteId
-            ? {
-                ...updatedNote,
-                createdAt: new Date(updatedNote.createdAt),
-                updatedAt: new Date(updatedNote.updatedAt),
-              }
-            : note
-        )
-      })
-
-      initialValueRef.current = updatedNote.title
-      toast.success(NOTES.success.updated.message)
-    },
-    onError: (error, _newNoteInput, context) => {
-      if (context?.previousNotes) {
-        queryClient.setQueryData(NOTES.tags.all(), context.previousNotes)
-      }
-      if (context?.previousNote) {
-        queryClient.setQueryData(NOTES.tags.single(noteId), context.previousNote)
-      }
-      const prevTitle =
-        context?.previousNote?.title || context?.previousNotes?.find(n => n.id === noteId)?.title
-
-      setValue(prevTitle || children)
-      setIsEditing(false)
-      toast.error(error.message)
-    },
-  })
-
-  const handleOnStopEditing = () => {
-    setIsEditing(false)
-    if (value === children) {
       return
     }
 
-    const result = updateNoteSchema.safeParse({ title: value })
+    const result = updateNoteSchema.safeParse({
+      title: trimmed,
+    })
 
     if (!result.success) {
-      toast.error(
-        result.error.issues.map(issue => issue.message)[0] ?? NOTES.errors.updateFailed.message
-      )
-      setValue(initialValueRef.current)
+      toast.error(result.error.issues[0]?.message ?? NOTES.errors.updateFailed.message)
+
       return
     }
 
-    mutate({ title: value })
-  }
+    updateNote({
+      id: noteId,
+      input: {
+        title: trimmed,
+      },
 
-  if (isEditing) {
-    return (
-      <Input
-        type='text'
-        value={value}
-        autoFocus={isEditing}
-        disabled={isPending}
-        onBlur={handleOnStopEditing}
-        onKeyDown={e => {
-          if (e.key === 'Enter' || e.key === 'Escape') {
-            handleOnStopEditing()
-          }
-        }}
-        style={{
-          color: fgColor,
-          backgroundColor: color === NOTES.colors.black.background ? '#FFFFFF20' : '#00000010',
-        }}
-        onChange={e => setValue(e.target.value)}
-        className={cn(
-          'font-handwritten w-10/12 cursor-text rounded-none border-none! p-0 text-xl ring-0! outline-none! placeholder:text-current placeholder:opacity-60 md:text-2xl',
-          className
-        )}
-      />
-    )
+      onSuccess: updated => {
+        initialValueRef.current = updated.title
+      },
+    })
   }
 
   return (
-    <h3
-      tabIndex={0}
-      onFocus={() => setIsEditing(true)}
+    <textarea
+      rows={1}
+      ref={inputRef}
+      defaultValue={initialValueRef.current}
+      maxLength={50}
+      autoCorrect='off'
+      spellCheck={false}
+      autoCapitalize='off'
+      disabled={isPending}
+      id={`note-title-${noteId}`}
+      onBlur={e => {
+        handleSave(e.currentTarget.value)
+      }}
       onKeyDown={e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          setIsEditing(true)
+        if (e.key === 'Enter') {
+          e.preventDefault()
+          e.currentTarget.blur()
+          return
+        }
+
+        if (e.key === 'Escape') {
+          e.currentTarget.value = initialValueRef.current
+          e.currentTarget.blur()
         }
       }}
-      onClick={() => setIsEditing(true)}
+      style={{
+        color: fgColor,
+      }}
       className={cn(
-        'font-handwritten line-clamp-3 w-10/12 cursor-text text-xl md:text-2xl',
+        'font-handwritten block field-sizing-content min-h-lh w-10/12 cursor-text resize-none overflow-hidden bg-transparent text-xl transition duration-200 ease-in-out outline-none md:text-2xl',
+
         isPending && 'pointer-events-none opacity-50',
         className
-      )}>
-      {value}
-    </h3>
+      )}
+    />
   )
 }
 
-// biome-ignore lint/complexity/noExcessiveLinesPerFunction: temporal
 export const StickyNoteContent = ({
   children,
   className,
   color,
   noteId,
-}: ComponentProps<'p'> & {
-  isEditing?: boolean
-  onEditingChange?: (isEditing: boolean) => void
+}: ComponentProps<'textarea'> & {
   children?: string
   color: NoteBackgroundColor
   noteId: string
 }) => {
-  const [isEditing, setIsEditing] = useState(false)
-  const [value, setValue] = useState(children)
-  const initialValueRef = useRef(children)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
+  const initialValue = children?.trim() ?? ''
+  const initialValueRef = useRef(initialValue)
   const fgColor = getNoteForegroundColor(color)
-  const queryClient = useQueryClient()
+  const placeholder = 'Add details...'
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: (input: UpdateNoteInput) => updateNote({ id: noteId, input }),
-    onMutate: async newNoteInput => {
-      await Promise.all([
-        queryClient.cancelQueries({ queryKey: NOTES.tags.all() }),
-        queryClient.cancelQueries({ queryKey: NOTES.tags.single(noteId) }),
-      ])
+  const { mutate: updateNote, isPending } = useUpdateNote()
 
-      const previousNotes = queryClient.getQueryData<Note[]>(NOTES.tags.all())
-      const previousNote = queryClient.getQueryData<Note>(NOTES.tags.single(noteId))
+  const handleSave = (value: string) => {
+    const trimmed = value.trim()
 
-      queryClient.setQueryData<Note[]>(NOTES.tags.all(), old => {
-        return old
-          ? old.map(note => (note.id === noteId ? { ...note, ...newNoteInput } : note))
-          : old
-      })
-
-      queryClient.setQueryData<Note>(NOTES.tags.single(noteId), old => {
-        return old ? { ...old, ...newNoteInput } : old
-      })
-
-      return { previousNotes, previousNote }
-    },
-
-    onSuccess: updatedNote => {
-      // reconcile with real server data instead of invalidate and refetch
-      if (!updatedNote) {
-        return
+    if (trimmed === initialValueRef.current) {
+      if (inputRef.current) {
+        inputRef.current.value = initialValueRef.current.trim()
       }
-
-      queryClient.setQueryData<Note>(NOTES.tags.single(noteId), {
-        ...updatedNote,
-        createdAt: new Date(updatedNote.createdAt),
-        updatedAt: new Date(updatedNote.updatedAt),
-      })
-
-      queryClient.setQueryData<Note[]>(NOTES.tags.all(), old => {
-        if (!old) {
-          return old
-        }
-
-        return old.map(note =>
-          note.id === noteId
-            ? {
-                ...updatedNote,
-                createdAt: new Date(updatedNote.createdAt),
-                updatedAt: new Date(updatedNote.updatedAt),
-              }
-            : note
-        )
-      })
-
-      initialValueRef.current = updatedNote.content
-      toast.success(NOTES.success.updated.message)
-    },
-    onError: (error, _newNoteInput, context) => {
-      if (context?.previousNotes) {
-        queryClient.setQueryData(NOTES.tags.all(), context.previousNotes)
-      }
-      if (context?.previousNote) {
-        queryClient.setQueryData(NOTES.tags.single(noteId), context.previousNote)
-      }
-      const prevContent =
-        context?.previousNote?.content ||
-        context?.previousNotes?.find(n => n.id === noteId)?.content
-
-      setValue(prevContent || children)
-      setIsEditing(false)
-      toast.error(error.message)
-    },
-  })
-
-  const handleOnStopEditing = () => {
-    setIsEditing(false)
-    if (value === children) {
       return
     }
 
-    const result = updateNoteSchema.safeParse({ content: value })
+    const result = updateNoteSchema.safeParse({
+      content: trimmed,
+    })
+
     if (!result.success) {
-      toast.error(
-        result.error.issues.map(issue => issue.message)[0] ?? NOTES.errors.updateFailed.message
-      )
-      setValue(initialValueRef.current)
+      toast.error(result.error.issues[0]?.message ?? NOTES.errors.updateFailed.message)
+
       return
     }
 
-    mutate({ content: value })
-  }
+    updateNote({
+      id: noteId,
 
-  if (isEditing) {
-    return (
-      <div className='h-full flex-1'>
-        <Input
-          type='text'
-          value={value}
-          autoFocus={isEditing}
-          disabled={isPending}
-          placeholder='Add details...'
-          onBlur={handleOnStopEditing}
-          onKeyDown={e => {
-            if (e.key === 'Enter' || e.key === 'Escape') {
-              handleOnStopEditing()
-            }
-          }}
-          style={{
-            color: fgColor,
-            backgroundColor: color === NOTES.colors.black.background ? '#FFFFFF20' : '#00000010',
-          }}
-          onChange={e => setValue(e.target.value)}
-          className={cn(
-            'leading-auto h-auto! cursor-text rounded-none border-none! p-0 text-xs opacity-80 ring-0! outline-none! placeholder:text-current placeholder:opacity-60 md:text-sm',
-            className
-          )}
-        />
-      </div>
-    )
+      input: {
+        content: trimmed,
+      },
+
+      onSuccess: updated => {
+        const nextValue = updated.content ?? ''
+
+        initialValueRef.current = nextValue
+      },
+    })
   }
 
   return (
-    <div className='h-full flex-1'>
-      <p
-        tabIndex={0}
-        onFocus={() => setIsEditing(true)}
-        onKeyDown={e => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            setIsEditing(true)
-          }
-        }}
-        onClick={() => setIsEditing(true)}
-        className={cn(
-          'line-clamp-4 block w-full cursor-text py-0.5 text-sm opacity-80',
-          isPending && 'pointer-events-none opacity-50',
-          (!value || value === '') && 'opacity-0 transition-opacity group-hover:opacity-50',
-          className
-        )}>
-        {value && value !== '' ? value : 'Add details...'}
-      </p>
-    </div>
+    <textarea
+      rows={1}
+      ref={inputRef}
+      defaultValue={initialValueRef.current}
+      maxLength={500}
+      placeholder={placeholder}
+      autoCorrect='off'
+      spellCheck={false}
+      autoCapitalize='off'
+      disabled={isPending}
+      id={`note-content-${noteId}`}
+      onBlur={e => {
+        handleSave(e.currentTarget.value.trim())
+      }}
+      onKeyDown={e => {
+        if (e.key === 'Enter') {
+          e.preventDefault()
+          e.currentTarget.blur()
+          return
+        }
+
+        if (e.key === 'Escape') {
+          e.currentTarget.value = initialValueRef.current.trim()
+          e.currentTarget.blur()
+        }
+      }}
+      style={{
+        color: fgColor,
+      }}
+      className={cn(
+        'block field-sizing-content min-h-lh w-full resize-none overflow-hidden bg-transparent text-sm opacity-80 transition duration-200 ease-in-out outline-none empty:opacity-0 group-hover:empty:opacity-80 focus:opacity-80',
+        'border-none p-0 shadow-none ring-0',
+        isPending && 'pointer-events-none opacity-50',
+        className
+      )}
+    />
   )
 }
 

@@ -3,19 +3,17 @@
 import { CollisionPriority } from '@dnd-kit/abstract'
 import { useDragDropMonitor, useDroppable } from '@dnd-kit/react'
 import { IconPlus } from '@tabler/icons-react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { NOTES, type Note } from '@zentro/constants/notes'
 import { useState } from 'react'
-import { toast } from 'sonner'
 import { AlertDialogConfirm } from '@/components/ui/alert-dialog-confirm'
 import { Button } from '@/components/ui/button'
 import { Kbd } from '@/components/ui/kbd'
 import { useConfirm } from '@/lib/hooks/use-confirm'
-import { deleteNote } from '@/lib/mutations/notes'
+import { useDeleteNote } from '@/lib/hooks/use-notes'
 import { useNotesStore } from '@/lib/store/notes'
 import { cn } from '@/lib/utils/theme'
 
-// biome-ignore lint/complexity/noExcessiveLinesPerFunction: temporal
 export const FloatingBar = () => {
   const [isDraggingNote, setIsDraggingNote] = useState(false)
   const [isConfirmOpen, confirm, handleConfirm, handleCancel] = useConfirm()
@@ -24,51 +22,11 @@ export const FloatingBar = () => {
     id: 'floating-bar',
     accept: 'sticky-note',
     type: 'floating-bar',
-    collisionPriority: CollisionPriority.Low,
+    collisionPriority: CollisionPriority.Highest,
   })
+
   const queryClient = useQueryClient()
-  const { mutate: deleteMutate } = useMutation({
-    mutationFn: (noteId: string) => deleteNote({ id: noteId }),
-
-    onMutate: async noteId => {
-      await Promise.all([
-        queryClient.cancelQueries({ queryKey: NOTES.tags.all() }),
-        queryClient.cancelQueries({ queryKey: NOTES.tags.single(noteId) }),
-      ])
-
-      const previousNotes = queryClient.getQueryData<Note[]>(NOTES.tags.all())
-      const previousNote = queryClient.getQueryData<Note>(NOTES.tags.single(noteId))
-
-      queryClient.setQueryData<Note[]>(NOTES.tags.all(), old =>
-        old?.filter(note => note.id !== noteId)
-      )
-
-      queryClient.removeQueries({
-        queryKey: NOTES.tags.single(noteId),
-        exact: true,
-      })
-
-      return { previousNotes, previousNote }
-    },
-
-    onSuccess: () => {
-      toast.success(NOTES.success.deleted.message)
-    },
-
-    onError: (error, noteId, context) => {
-      if (context?.previousNotes) {
-        queryClient.setQueryData<Note[]>(NOTES.tags.all(), () =>
-          context.previousNotes?.toSorted((a, b) => a.order - b.order)
-        )
-      }
-
-      if (context?.previousNote) {
-        queryClient.setQueryData(NOTES.tags.single(noteId), context.previousNote)
-      }
-
-      toast.error(error.message)
-    },
-  })
+  const { mutate: deleteNote } = useDeleteNote()
 
   useDragDropMonitor({
     onDragStart: event => {
@@ -82,6 +40,7 @@ export const FloatingBar = () => {
         setIsDraggingNote(true)
       }
     },
+
     onDragEnd: async event => {
       if (event.canceled) {
         setIsDraggingNote(false)
@@ -110,7 +69,7 @@ export const FloatingBar = () => {
 
         const confirmed = await confirm()
         if (confirmed) {
-          deleteMutate(source.id.toString())
+          deleteNote({ id: noteId })
         } else {
           queryClient.setQueryData<Note[]>(NOTES.tags.all(), () =>
             previousNotes?.toSorted((a, b) => a.order - b.order)

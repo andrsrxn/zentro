@@ -1,29 +1,20 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import {
-  NOTES,
-  type Note,
-  type NoteBackgroundColor,
-  noteBackgroundColors,
-} from '@zentro/constants/notes'
+import { NOTES, type NoteBackgroundColor, noteBackgroundColors } from '@zentro/constants/notes'
 import { type CreateNoteInput, createNoteSchema } from '@zentro/schemas/notes'
 import { type ComponentProps, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
 import { Field, FieldError, FieldGroup, FieldLabel } from '@/components/ui/field'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Textarea } from '@/components/ui/textarea'
-import { createNote } from '@/lib/mutations/notes'
-import { authClient } from '@/lib/services/auth-client'
+import { useCreateNote } from '@/lib/hooks/use-notes'
 import { getNoteForegroundColor } from '@/lib/utils/notes'
 import { cn } from '@/lib/utils/theme'
 
-// biome-ignore lint/complexity/noExcessiveLinesPerFunction: temporal
 export function CreateNoteForm({
   onSuccess,
   onCancel,
@@ -48,94 +39,14 @@ export function CreateNoteForm({
   })
   const [color, setColor] = useState<NoteBackgroundColor>(defaultValues.color)
   const fgColor = getNoteForegroundColor(color)
-  const session = authClient.useSession()
-  const queryClient = useQueryClient()
 
-  const { mutate } = useMutation({
-    mutationFn: (input: CreateNoteInput) => createNote({ input }),
-
-    onMutate: async newNoteInput => {
-      await queryClient.cancelQueries({
-        queryKey: NOTES.tags.all(),
-      })
-
-      const previousNotes = queryClient.getQueryData<Note[]>(NOTES.tags.all())
-
-      // temporary optimistic note
-      const optimisticNote: Note = {
-        id: '',
-        positionX: 0,
-        positionY: 0,
-        userId: session.data?.user.id ?? crypto.randomUUID(),
-        order: ((previousNotes?.length ?? 0) + 1) * NOTES.orderStep,
-        title: newNoteInput.title,
-        content: newNoteInput.content,
-        color: newNoteInput.color,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      }
-
-      queryClient.setQueryData<Note[]>(NOTES.tags.all(), old =>
-        old ? [...old, optimisticNote] : [optimisticNote]
-      )
-
-      return {
-        previousNotes,
-        // to replace the optimistic note with the real server note
-        optimisticId: optimisticNote.id,
-        optimisticNote,
-      }
-    },
-
-    onSuccess: (createdNote, _variables, context) => {
-      if (!(createdNote && context)) {
-        return
-      }
-
-      const normalizedNote: Note = {
-        ...createdNote,
-        createdAt: new Date(createdNote.createdAt),
-        updatedAt: new Date(createdNote.updatedAt),
-      }
-
-      // replace optimistic note with real server note
-      queryClient.setQueryData<Note[]>(NOTES.tags.all(), old => {
-        if (!old) {
-          return [normalizedNote]
-        }
-
-        return old.map(note => (note.id === context.optimisticId ? normalizedNote : note))
-      })
-
-      queryClient.setQueryData(NOTES.tags.single(normalizedNote.id), normalizedNote)
-
-      const noteElement = document.querySelector(`#${normalizedNote.id}`)
-      if (noteElement) {
-        noteElement.scrollIntoView({
-          behavior: 'smooth',
-          block: 'center',
-          inline: 'nearest',
-        })
-      }
-      toast.success(NOTES.success.created.message)
-    },
-
-    onError: (error, _variables, context) => {
-      if (context?.previousNotes) {
-        queryClient.setQueryData<Note[]>(NOTES.tags.all(), () =>
-          context?.previousNotes?.toSorted((a, b) => a.order - b.order)
-        )
-      }
-
-      toast.error(error.message)
-    },
-  })
+  const { mutate: createNote } = useCreateNote()
 
   function onSubmit(data: CreateNoteInput) {
     form.reset()
     onSuccess?.()
 
-    mutate(data)
+    createNote({ input: data })
   }
 
   function handleColorChange(color: NoteBackgroundColor) {

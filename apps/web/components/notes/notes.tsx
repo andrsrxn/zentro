@@ -8,12 +8,9 @@ import {
   IconPalette,
   IconTrash,
 } from '@tabler/icons-react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { TimeZone } from '@zentro/constants/countries'
-import { NOTES, type Note } from '@zentro/constants/notes'
-import type { UpdateNoteInput } from '@zentro/schemas/notes'
+import { NOTES } from '@zentro/constants/notes'
 import { type ComponentProps, useRef } from 'react'
-import { toast } from 'sonner'
 import {
   StickyNote,
   StickyNoteContent,
@@ -35,8 +32,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
 import { useConfirm } from '@/lib/hooks/use-confirm'
-import { useNotes } from '@/lib/hooks/use-notes'
-import { deleteNote, updateNote } from '@/lib/mutations/notes'
+import { useDeleteNote, useNotes, useUpdateNote } from '@/lib/hooks/use-notes'
 import { authClient } from '@/lib/services/auth-client'
 import { capitalizeFirstLetter } from '@/lib/utils/strings'
 import { cn } from '@/lib/utils/theme'
@@ -47,114 +43,9 @@ export const Notes = ({ className, ...props }: ComponentProps<'div'>) => {
   const { notes, isPending, error } = useNotes()
   const [isConfirmOpen, confirm, handleConfirm, handleCancel] = useConfirm()
   const triggerRef = useRef<HTMLButtonElement>(null)
-  const queryClient = useQueryClient()
 
-  const { mutate: deleteMutate } = useMutation({
-    mutationFn: (noteId: string) => deleteNote({ id: noteId }),
-
-    onMutate: async noteId => {
-      await Promise.all([
-        queryClient.cancelQueries({ queryKey: NOTES.tags.all() }),
-        queryClient.cancelQueries({ queryKey: NOTES.tags.single(noteId) }),
-      ])
-
-      const previousNotes = queryClient.getQueryData<Note[]>(NOTES.tags.all())
-      const previousNote = queryClient.getQueryData<Note>(NOTES.tags.single(noteId))
-
-      queryClient.setQueryData<Note[]>(NOTES.tags.all(), old =>
-        old?.filter(note => note.id !== noteId)
-      )
-
-      queryClient.removeQueries({
-        queryKey: NOTES.tags.single(noteId),
-        exact: true,
-      })
-
-      return { previousNotes, previousNote }
-    },
-
-    onSuccess: () => {
-      toast.success(NOTES.success.deleted.message)
-    },
-
-    onError: (error, noteId, context) => {
-      if (context?.previousNotes) {
-        queryClient.setQueryData(NOTES.tags.all(), context.previousNotes)
-      }
-
-      if (context?.previousNote) {
-        queryClient.setQueryData(NOTES.tags.single(noteId), context.previousNote)
-      }
-
-      toast.error(error.message)
-    },
-  })
-
-  const { mutate: updateMutate } = useMutation({
-    mutationFn: ({ noteId, input }: { noteId: string; input: UpdateNoteInput }) =>
-      updateNote({ id: noteId, input }),
-    onMutate: async ({ noteId, input: newNoteInput }) => {
-      await Promise.all([
-        queryClient.cancelQueries({ queryKey: NOTES.tags.all() }),
-        queryClient.cancelQueries({ queryKey: NOTES.tags.single(noteId) }),
-      ])
-
-      const previousNotes = queryClient.getQueryData<Note[]>(NOTES.tags.all())
-      const previousNote = queryClient.getQueryData<Note>(NOTES.tags.single(noteId))
-
-      queryClient.setQueryData<Note[]>(NOTES.tags.all(), old => {
-        return old
-          ? old.map(note => (note.id === noteId ? { ...note, ...newNoteInput } : note))
-          : old
-      })
-
-      queryClient.setQueryData<Note>(NOTES.tags.single(noteId), old => {
-        return old ? { ...old, ...newNoteInput } : old
-      })
-
-      return { previousNotes, previousNote }
-    },
-
-    onSuccess: (updatedNote, { noteId }) => {
-      // reconcile with real server data instead of invalidate and refetch
-      if (!updatedNote) {
-        return
-      }
-
-      queryClient.setQueryData<Note>(NOTES.tags.single(noteId), {
-        ...updatedNote,
-        createdAt: new Date(updatedNote.createdAt),
-        updatedAt: new Date(updatedNote.updatedAt),
-      })
-
-      queryClient.setQueryData<Note[]>(NOTES.tags.all(), old => {
-        if (!old) {
-          return old
-        }
-
-        return old.map(note =>
-          note.id === noteId
-            ? {
-                ...updatedNote,
-                createdAt: new Date(updatedNote.createdAt),
-                updatedAt: new Date(updatedNote.updatedAt),
-              }
-            : note
-        )
-      })
-
-      toast.success(NOTES.success.updated.message)
-    },
-    onError: (error, { noteId }, context) => {
-      if (context?.previousNotes) {
-        queryClient.setQueryData(NOTES.tags.all(), context.previousNotes)
-      }
-      if (context?.previousNote) {
-        queryClient.setQueryData(NOTES.tags.single(noteId), context.previousNote)
-      }
-      toast.error(error.message)
-    },
-  })
+  const { mutate: deleteNote } = useDeleteNote()
+  const { mutate: updateNote } = useUpdateNote()
 
   if (!session.data) {
     return null
@@ -270,7 +161,7 @@ export const Notes = ({ className, ...props }: ComponentProps<'div'>) => {
                               if (value.background === note.color) {
                                 return
                               }
-                              updateMutate({ noteId: note.id, input: { color: value.background } })
+                              updateNote({ id: note.id, input: { color: value.background } })
                             }}>
                             <div
                               className='h-5 w-full rounded-sm border'
@@ -285,7 +176,7 @@ export const Notes = ({ className, ...props }: ComponentProps<'div'>) => {
                     onSelect={async () => {
                       const confirmed = await confirm()
                       if (confirmed) {
-                        deleteMutate(note.id)
+                        deleteNote({ id: note.id })
                       }
                     }}
                     variant='destructive'>

@@ -17,6 +17,9 @@ const Toaster = ({ className, ...props }: ToasterProps) => {
   return (
     <Sonner
       theme={theme as ToasterProps['theme']}
+      mobileOffset={{
+        bottom: 72,
+      }}
       className={cn('toaster group pointer-events-auto', className)}
       icons={{
         success: <IconCircleCheck className='size-4' />,

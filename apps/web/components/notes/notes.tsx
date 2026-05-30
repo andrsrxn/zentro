@@ -1,57 +1,21 @@
 'use client'
 
-import {
-  IconDots,
-  IconExclamationCircle,
-  IconLoader,
-  IconNote,
-  IconPalette,
-  IconTrash,
-} from '@tabler/icons-react'
-import type { TimeZone } from '@zentro/constants/countries'
+import { IconExclamationCircle, IconLoader, IconNote } from '@tabler/icons-react'
 import { NOTES } from '@zentro/constants/notes'
-import { type ComponentProps, useRef } from 'react'
-import {
-  StickyNote,
-  StickyNoteContent,
-  StickyNoteFooter,
-  StickyNoteTitle,
-} from '@/components/notes/sticky-note'
-import { AlertDialogConfirm } from '@/components/ui/alert-dialog-confirm'
-import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuPortal,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import type { ComponentProps } from 'react'
+import { NoteItem } from '@/components/notes/note-item'
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty'
-import { useConfirm } from '@/lib/hooks/use-confirm'
-import { useDeleteNote, useNotes, useUpdateNote } from '@/lib/hooks/use-notes'
+import { useNotes } from '@/lib/hooks/use-notes'
 import { authClient } from '@/lib/services/auth-client'
-import { capitalizeFirstLetter } from '@/lib/utils/strings'
 import { cn } from '@/lib/utils/theme'
 
-// biome-ignore lint/complexity/noExcessiveLinesPerFunction: temporal
 export const Notes = ({ className, ...props }: ComponentProps<'div'>) => {
   const session = authClient.useSession()
   const { notes, isPending, error } = useNotes()
-  const [isConfirmOpen, confirm, handleConfirm, handleCancel] = useConfirm()
-  const triggerRef = useRef<HTMLButtonElement>(null)
-
-  const { mutate: deleteNote } = useDeleteNote()
-  const { mutate: updateNote } = useUpdateNote()
 
   if (!session.data) {
     return null
   }
-
-  const timeZone = session.data.user.timeZone as unknown as TimeZone
 
   if (isPending) {
     return (
@@ -94,115 +58,15 @@ export const Notes = ({ className, ...props }: ComponentProps<'div'>) => {
   }
 
   return (
-    <>
-      <div
-        className={cn(
-          'animate-in wrapper fade-in zoom-in-98 grid max-w-7xl grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-6 py-24 duration-300 ease-in-out',
-          className
-        )}
-        {...props}>
-        {notes.map((note, index) => (
-          <StickyNote
-            group='notes'
-            index={index}
-            onDoubleClick={e => e.stopPropagation()}
-            className={cn('min-h-28')}
-            color={note.color}
-            id={note.id}
-            key={note.id}>
-            <StickyNoteTitle color={note.color} noteId={note.id}>
-              {note.title}
-            </StickyNoteTitle>
-            <StickyNoteContent color={note.color} noteId={note.id}>
-              {note.content}
-            </StickyNoteContent>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  onFocusCapture={e => {
-                    // To restore the focus to the trigger when the alert dialog closes
-                    triggerRef.current = e.currentTarget
-                  }}
-                  className={cn(
-                    'absolute top-2 right-2 hover:bg-black/10 dark:hover:bg-white/10',
-                    note.color === NOTES.colors.black.background &&
-                      'hover:bg-white/20! hover:text-white!'
-                  )}
-                  variant='ghost'
-                  size='icon'>
-                  <IconDots />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                onCloseAutoFocus={e => {
-                  if (isConfirmOpen) {
-                    e.preventDefault()
-                  }
-                }}
-                className='w-20'
-                align='end'
-                side='bottom'>
-                <DropdownMenuGroup>
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>
-                      <IconPalette />
-                      Color
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
-                        {Object.entries(NOTES.colors).map(([key, value]) => (
-                          <DropdownMenuItem
-                            key={key}
-                            aria-label={capitalizeFirstLetter(key)}
-                            className={cn(
-                              value.background === note.color && 'bg-primary/10 focus:bg-primary/15'
-                            )}
-                            onSelect={() => {
-                              if (value.background === note.color) {
-                                return
-                              }
-                              updateNote({ id: note.id, input: { color: value.background } })
-                            }}>
-                            <div
-                              className='h-5 w-full rounded-sm border'
-                              style={{ backgroundColor: value.background }}
-                            />
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-                  <DropdownMenuItem
-                    onSelect={async () => {
-                      const confirmed = await confirm()
-                      if (confirmed) {
-                        deleteNote({ id: note.id })
-                      }
-                    }}
-                    variant='destructive'>
-                    <IconTrash />
-                    Delete
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <StickyNoteFooter
-              color={note.color}
-              createdAt={new Date(note.createdAt)}
-              timeZone={timeZone}
-            />
-          </StickyNote>
-        ))}
-      </div>
-      <AlertDialogConfirm
-        open={isConfirmOpen}
-        onConfirm={handleConfirm}
-        onCancel={handleCancel}
-        title='Delete Note'
-        message='Are you sure you want to delete this note? This action cannot be undone.'
-        confirmButton='Delete'
-        returnFocusRef={triggerRef}
-      />
-    </>
+    <div
+      className={cn(
+        'animate-in wrapper fade-in zoom-in-98 grid max-w-7xl grid-cols-[repeat(auto-fill,minmax(250px,1fr))] gap-6 py-24 duration-300 ease-in-out',
+        className
+      )}
+      {...props}>
+      {notes.map((note, index) => (
+        <NoteItem key={note.id} note={note} index={index} />
+      ))}
+    </div>
   )
 }

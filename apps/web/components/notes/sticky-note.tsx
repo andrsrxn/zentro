@@ -22,14 +22,14 @@ export const StickyNote = ({
   group,
   ...props
 }: Omit<ComponentProps<'div'>, 'color'> &
-  Pick<Note, 'color' | 'id'> & { index: number; group: string }) => {
+  Pick<Note, 'color' | 'id'> & { index?: number; group?: string }) => {
   const fgColor = getNoteForegroundColor(color)
 
   const { ref, isDragging } = useSortable({
     accept: ['sticky-note', 'floating-bar'],
     type: 'sticky-note',
     id,
-    index,
+    index: index ?? 0,
     group,
   })
 
@@ -238,7 +238,7 @@ export const StickyNoteFooter = ({
 }: Omit<ComponentProps<'div'>, 'color'> &
   Pick<Note, 'color' | 'createdAt'> & { timeZone?: TimeZone }) => {
   const fgColor = getNoteForegroundColor(color)
-  const date = formatDate({ date: createdAt, timeZone })
+  const date = formatDate({ date: createdAt, timeZone, includeTime: true })
   return (
     <div className={cn('flex flex-col gap-2 pt-1 opacity-60', className)}>
       <Separator className='opacity-30' style={{ backgroundColor: fgColor }} />

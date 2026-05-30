@@ -83,16 +83,16 @@ export const FloatingBar = () => {
   })
 
   return (
-    <div className='fixed bottom-4 left-1/2 z-50 -translate-x-1/2'>
-      <div className='fade-in animate-in slide-in-from-bottom-20 bg-card flex h-11 w-fit max-w-full items-center justify-center gap-4 rounded-full border pr-2 pl-4 shadow-xl/5 transition duration-500 ease-in-out'>
+    <div className='fixed bottom-4 z-50 w-max max-w-11/12'>
+      <div className='fade-in animate-in slide-in-from-bottom-20 bg-card flex h-11 w-full max-w-full items-center justify-center gap-4 rounded-full border pr-2 pl-4 shadow-xl/5 transition duration-500 ease-in-out'>
         <span className='flex items-center gap-1.5 text-sm font-medium'>
           <span className='inline-block size-1 shrink-0 rounded-full bg-green-400' /> Actions
         </span>
-        <div className='flex items-center gap-4' ref={ref}>
+        <div className='flex shrink-0 items-center gap-4' ref={ref}>
           {isDraggingNote ? (
             <span
               className={cn(
-                'text-destructive border-destructive/30 bg-destructive/10 block rounded-full border-2 border-dashed px-6 font-medium',
+                'text-destructive border-destructive/30 bg-destructive/10 inline-flex items-center rounded-full border-2 border-dashed px-6 font-medium',
                 isDropTarget && 'border-destructive'
               )}>
               Drop to delete

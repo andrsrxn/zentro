@@ -90,10 +90,13 @@ export default async function Home() {
               dateTime={new Date().toISOString()}
               title={formatDate({
                 date: new Date(),
-                includeWeekDay: true,
                 timeZone: session.data.user.timeZone as TimeZone,
               })}>
-              {formatDate({ date: new Date(), timeZone: session.data.user.timeZone as TimeZone })}
+              {formatDate({
+                includeWeekDay: true,
+                date: new Date(),
+                timeZone: session.data.user.timeZone as TimeZone,
+              })}
             </time>
 
             <AccountDropdown

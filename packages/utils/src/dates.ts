@@ -17,6 +17,6 @@ export const formatDate = ({
   const timezonedDate = timeZone
     ? new TZDate(typeof date === 'string' ? date : date.toISOString(), timeZone)
     : date
-  const formatted = format(timezonedDate, includeTime ? `${formatString} p` : formatString)
+  const formatted = format(timezonedDate, includeTime ? `${formatString}, p` : formatString)
   return formatted
 }

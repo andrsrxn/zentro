@@ -136,7 +136,7 @@ export const AccountDialog = () => {
                 <span className='text-muted-foreground'>Since:</span>
                 <span className='font-medium' suppressHydrationWarning>
                   {formatDate({
-                    date: new Date(session.data.user.createdAt),
+                    date: session.data.user.createdAt,
                     includeWeekDay: true,
                     timeZone: session.data.user.timeZone as TimeZone,
                   })}

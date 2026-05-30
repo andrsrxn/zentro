@@ -76,6 +76,7 @@ export const useNotes = () => {
   const query = useQuery({
     queryKey: NOTES.tags.all(),
     queryFn: getNotes,
+    select: notes => notes?.map(note => normalizeNote(note)),
   })
 
   return {
@@ -92,10 +93,11 @@ export const useNote = ({ id }: { id: string }) => {
   const query = useQuery({
     queryKey: NOTES.tags.single(id),
     queryFn: () => getNoteById({ id }),
+    select: note => (note ? normalizeNote(note) : undefined),
   })
 
   return {
-    notes: query.data ?? [],
+    note: query.data ?? undefined,
     error: query.error,
     isPending: query.isPending,
     isLoading: query.isLoading,
@@ -107,6 +109,7 @@ export const useNote = ({ id }: { id: string }) => {
 interface CreateNoteVariables {
   input: CreateNoteInput
   onSuccess?: (note: Note) => void
+  onError?: () => void
 }
 
 export const useCreateNote = () => {
@@ -158,9 +161,10 @@ export const useCreateNote = () => {
       onSuccess?.(normalized)
     },
 
-    onError: (error, _, ctx) => {
+    onError: (error, { onError }, ctx) => {
       rollbackNotes(qc, { all: ctx?.previousNotes })
       toast.error(error.message)
+      onError?.()
     },
   })
 }
@@ -193,7 +197,6 @@ export const useDeleteNote = () => {
 interface UpdateNoteVariables {
   id: string
   input: UpdateNoteInput
-  // TODO: check use notes, search temporal
   onSuccess?: (note: Note) => void
   onError?: () => void
 }

@@ -10,6 +10,7 @@
       "!**/dist-types",
       "!**/.turbo",
       "!**/.next",
+      "!**/.agents",
       "!**/*.mjs",
       "!**/*.cjs",
       "!**/node_modules",

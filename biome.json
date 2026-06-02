@@ -636,8 +636,19 @@
           "correctness": {
             "noProcessGlobal": "off"
           },
+
           "style": {
             "noProcessEnv": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["**/env.ts", "**/env-client.ts", "**/schemas/**"],
+      "linter": {
+        "rules": {
+          "performance": {
+            "noNamespaceImport": "off"
           }
         }
       }

@@ -1,5 +1,3 @@
-/** biome-ignore-all lint/performance/noNamespaceImport: zod best approach */
-
 import { NODE_ENV } from '@zentro/constants/env'
 import { config } from 'dotenv'
 import * as z from 'zod'

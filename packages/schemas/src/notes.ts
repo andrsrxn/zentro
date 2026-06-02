@@ -1,5 +1,5 @@
 import { noteBackgroundColors } from '@zentro/constants/notes'
-import { z } from 'zod'
+import * as z from 'zod'
 
 const invalidType = 'Invalid type'
 

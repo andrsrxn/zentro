@@ -18,11 +18,12 @@ export const StickyNote = ({
   id,
   children,
   className,
+  disabled,
   index,
   group,
   ...props
 }: Omit<ComponentProps<'div'>, 'color'> &
-  Pick<Note, 'color' | 'id'> & { index?: number; group?: string }) => {
+  Pick<Note, 'color' | 'id'> & { index?: number; group?: string; disabled?: boolean }) => {
   const fgColor = getNoteForegroundColor(color)
 
   const { ref, isDragging } = useSortable({
@@ -31,6 +32,7 @@ export const StickyNote = ({
     id,
     index: index ?? 0,
     group,
+    disabled,
   })
 
   return (
@@ -39,7 +41,7 @@ export const StickyNote = ({
       data-slot='sticky-note'
       ref={ref}
       className={cn(
-        'group focus-visible:ring-ring/50 relative flex h-fit min-h-36 cursor-grab flex-col gap-2 rounded-xs border p-4 shadow-md duration-300 ease-in-out focus-visible:ring-3 focus-visible:outline-0',
+        'group focus-visible:ring-ring/50 relative flex h-fit min-h-32 cursor-grab flex-col gap-2 rounded-xs border p-4 shadow-md duration-300 ease-in-out focus-visible:ring-3 focus-visible:outline-0 md:min-h-36',
         isDragging && 'opacity-60',
 
         className
@@ -55,6 +57,7 @@ export const StickyNoteTitle = ({
   className,
   color,
   noteId,
+  ...props
 }: ComponentProps<'textarea'> & {
   color: NoteBackgroundColor
   children: string
@@ -132,6 +135,7 @@ export const StickyNoteTitle = ({
         isPending && 'pointer-events-none opacity-50',
         className
       )}
+      {...props}
     />
   )
 }
@@ -141,6 +145,7 @@ export const StickyNoteContent = ({
   className,
   color,
   noteId,
+  ...props
 }: ComponentProps<'textarea'> & {
   children?: string
   color: NoteBackgroundColor
@@ -220,11 +225,12 @@ export const StickyNoteContent = ({
         color: fgColor,
       }}
       className={cn(
-        'block field-sizing-content min-h-lh w-full resize-none overflow-hidden bg-transparent text-sm opacity-80 transition duration-200 ease-in-out outline-none empty:opacity-0 group-hover:empty:opacity-80 focus:opacity-80',
+        'block field-sizing-content min-h-lh w-full flex-1 resize-none overflow-hidden bg-transparent text-sm opacity-80 transition duration-200 ease-in-out outline-none empty:opacity-0 group-hover:empty:opacity-80 focus:opacity-80',
         'border-none p-0 shadow-none ring-0',
         isPending && 'pointer-events-none opacity-50',
         className
       )}
+      {...props}
     />
   )
 }
@@ -235,12 +241,13 @@ export const StickyNoteFooter = ({
   color,
   timeZone,
   className,
+  ...props
 }: Omit<ComponentProps<'div'>, 'color'> &
   Pick<Note, 'color' | 'createdAt'> & { timeZone?: TimeZone }) => {
   const fgColor = getNoteForegroundColor(color)
   const date = formatDate({ date: createdAt, timeZone, includeTime: true })
   return (
-    <div className={cn('flex flex-col gap-2 pt-1 opacity-60', className)}>
+    <div className={cn('flex flex-col gap-2 pt-1 opacity-60', className)} {...props}>
       <Separator className='opacity-30' style={{ backgroundColor: fgColor }} />
       {children}
       <time className='text-xs leading-none md:text-sm' dateTime={createdAt.toISOString()}>

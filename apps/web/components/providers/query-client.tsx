@@ -5,6 +5,7 @@ import {
   QueryClient,
   QueryClientProvider as QueryClientProviderRQ,
 } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { HTTP_ERRORS } from '@zentro/constants/errors'
 import type { AppError } from '@zentro/utils/errors'
 import { QUERIES } from '@/lib/constants/queries'
@@ -50,7 +51,7 @@ export const QueryClientProvider = ({ children }: { children: React.ReactNode })
   return (
     <QueryClientProviderRQ client={queryClient}>
       {children}
-      {/* <ReactQueryDevtools /> */}
+      <ReactQueryDevtools />
     </QueryClientProviderRQ>
   )
 }

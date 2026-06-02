@@ -1,4 +1,3 @@
-import { AUTH } from '@zentro/constants/auth'
 import { HTTP_ERRORS } from '@zentro/constants/errors'
 import { headers } from 'next/headers'
 import { cache } from 'react'
@@ -9,10 +8,6 @@ export const getSession = cache(async () => {
     const session = await authClient.getSession({
       fetchOptions: {
         headers: await headers(),
-        next: {
-          tags: [...AUTH.tags.session],
-          revalidate: AUTH.cacheTime.minutes * 60,
-        },
       },
     })
     return session

@@ -1,6 +1,7 @@
 import { IconDots, IconPalette, IconTrash } from '@tabler/icons-react'
 import type { TimeZone } from '@zentro/constants/countries'
 import { NOTES, type Note } from '@zentro/constants/notes'
+import { capitalizeFirstLetter } from '@zentro/utils/strings'
 import { type ComponentProps, useRef } from 'react'
 import {
   StickyNote,
@@ -24,7 +25,6 @@ import {
 import { useConfirm } from '@/lib/hooks/use-confirm'
 import { useDeleteNote, useUpdateNote } from '@/lib/hooks/use-notes'
 import { authClient } from '@/lib/services/auth-client'
-import { capitalizeFirstLetter } from '@/lib/utils/strings'
 import { cn } from '@/lib/utils/theme'
 
 interface NoteItemProps extends Omit<ComponentProps<typeof StickyNote>, 'id' | 'color'> {

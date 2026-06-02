@@ -13,6 +13,7 @@ import {
 import { AUTH } from '@zentro/constants/auth'
 import type { CountryCode, TimeZone } from '@zentro/constants/countries'
 import { formatDate } from '@zentro/utils/dates'
+import { capitalizeFirstLetter } from '@zentro/utils/strings'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
@@ -36,7 +37,6 @@ import { useUserStore } from '@/lib/store/user'
 import { deleteCsrfToken } from '@/lib/utils/csrf'
 import { formatUserAgent } from '@/lib/utils/device'
 import { getCountryName } from '@/lib/utils/geolocation'
-import { capitalizeFirstLetter } from '@/lib/utils/strings'
 
 const UserAgentDisplay = ({ userAgent }: { userAgent: string }) => {
   const { browser, os, deviceType, deviceVendor } = formatUserAgent(userAgent)

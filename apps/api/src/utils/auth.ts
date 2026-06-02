@@ -28,7 +28,6 @@ export const auth = betterAuth({
       domain: COOKIE_OPTIONS.domain,
     },
   },
-  // TODO: hacer una lista de al menos 8 notas, crear imagenes, descripcion del proyecto, añadir url a github
   plugins: [openAPI(), lastLoginMethod()],
   appName: API.name,
   basePath: '/v1/auth',

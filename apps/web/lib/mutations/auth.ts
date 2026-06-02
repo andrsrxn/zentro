@@ -1,7 +1,6 @@
 import { HTTP_ERRORS } from '@zentro/constants/errors'
 import { authClient } from '@/lib/services/auth-client'
 
-// TODO: on actions and invalidate cache
 export const signOut = async () => {
   try {
     const session = await authClient.signOut()

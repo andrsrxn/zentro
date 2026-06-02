@@ -172,8 +172,7 @@ const app = new Hono()
     // Remove the moved note to find its new neighbors
     const otherNotes = allNotes.filter(n => n.id !== id)
 
-    // Since `toIndex` is the exact 0-based index where the item belongs in the final array,
-    // we can insert it exactly at `toIndex` inside `otherNotes`.
+    // Since `toIndex` is the exact 0-based index where the item belongs in the final array, it can insert it exactly at `toIndex` inside `otherNotes`
     const insertAt = toIndex
 
     const before = otherNotes[insertAt - 1]

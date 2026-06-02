@@ -1,4 +1,3 @@
-// packages/utils/src/format-number.ts
 import type { Currency } from '@zentro/constants/countries'
 
 type CompactDisplay = Intl.NumberFormatOptions['compactDisplay']

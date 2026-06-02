@@ -1,18 +1,12 @@
 import { COMPANY } from '@zentro/constants/company'
 import type { TimeZone } from '@zentro/constants/countries'
 import { IMAGES } from '@zentro/constants/media'
-import { NOTES } from '@zentro/constants/notes'
 import { formatDate } from '@zentro/utils/dates'
 import Link from 'next/link'
 import { SignInForm } from '@/components/auth/sign-in-form'
 import { Notes } from '@/components/notes/notes'
 import { NotesPanel } from '@/components/notes/panel'
-import {
-  StickyNote,
-  StickyNoteContent,
-  StickyNoteFooter,
-  StickyNoteTitle,
-} from '@/components/notes/sticky-note'
+import { ShowcaseNotes } from '@/components/notes/showcase-notes'
 import { Panel } from '@/components/shared/panel'
 import { ShortcutsDialog } from '@/components/shared/shortcuts-dialog'
 import {
@@ -27,7 +21,6 @@ import { AccountDialog } from '@/components/user/account-dialog'
 import { AccountDropdown } from '@/components/user/account-dropdown'
 import { getSession } from '@/lib/data/auth'
 
-// biome-ignore lint/complexity/noExcessiveLinesPerFunction: temporal
 export default async function Home() {
   const session = await getSession()
 
@@ -72,132 +65,7 @@ export default async function Home() {
             </p>
           </CardFooter>
         </Card>
-        <div className='fixed bottom-0 left-0 w-full lg:-bottom-3' aria-hidden>
-          <StickyNote
-            color={NOTES.colors.blue.background}
-            id='demo-note-1'
-            disabled
-            className='animate-zoom-in absolute -bottom-2 left-1/2 w-[230px] translate-x-[-280px] -rotate-3 cursor-default hover:-translate-y-3 md:w-[260px] md:translate-x-[-340px] md:rotate-2'>
-            <StickyNoteTitle
-              className='pointer-events-none select-none'
-              color={NOTES.colors.blue.background}
-              readOnly
-              noteId='demo-note-1'>
-              Gym after work
-            </StickyNoteTitle>
-            <StickyNoteContent
-              className='pointer-events-none select-none'
-              color={NOTES.colors.blue.background}
-              readOnly
-              noteId='demo-note-1'
-            />
-            <StickyNoteFooter
-              color={NOTES.colors.blue.background}
-              createdAt={new Date('2026-06-01T17:19:42-06:00')}
-              timeZone='America/Guatemala'
-            />
-          </StickyNote>
-          <StickyNote
-            color={NOTES.colors.yellow.background}
-            id='demo-note-2'
-            disabled
-            className='animate-zoom-in absolute -bottom-4 left-1/2 w-[230px] -translate-x-1/2 -rotate-8 cursor-default opacity-0 [animation-delay:100ms] hover:-translate-y-3 md:w-[260px]'>
-            <StickyNoteTitle
-              className='pointer-events-none select-none'
-              color={NOTES.colors.yellow.background}
-              readOnly
-              noteId='demo-note-2'>
-              Dinner reservation
-            </StickyNoteTitle>
-            <StickyNoteContent
-              className='pointer-events-none select-none'
-              color={NOTES.colors.yellow.background}
-              readOnly
-              noteId='demo-note-2'>
-              Book the restaurant for dad's birthday on Saturday
-            </StickyNoteContent>
-            <StickyNoteFooter
-              color={NOTES.colors.yellow.background}
-              createdAt={new Date('2026-06-01T17:19:42-06:00')}
-              timeZone='America/Guatemala'
-            />
-          </StickyNote>
-          <StickyNote
-            color={NOTES.colors.green.background}
-            id='demo-note-3'
-            disabled
-            className='animate-zoom-in absolute right-1/2 -bottom-3 w-[230px] translate-x-[300px] rotate-4 cursor-default opacity-0 [animation-delay:200ms] hover:-translate-y-3 md:w-[260px] md:translate-x-[360px]'>
-            <StickyNoteTitle
-              className='pointer-events-none select-none'
-              color={NOTES.colors.green.background}
-              readOnly
-              noteId='demo-note-3'>
-              Shopping list
-            </StickyNoteTitle>
-            <StickyNoteContent
-              className='pointer-events-none select-none'
-              color={NOTES.colors.green.background}
-              readOnly
-              noteId='demo-note-3'>
-              Milk, eggs, bread, cheese
-            </StickyNoteContent>
-            <StickyNoteFooter
-              color={NOTES.colors.green.background}
-              createdAt={new Date('2026-06-01T17:19:42-06:00')}
-              timeZone='America/Guatemala'
-            />
-          </StickyNote>
-          <StickyNote
-            color={NOTES.colors.blue.background}
-            id='demo-note-4'
-            disabled
-            className='animate-zoom-in absolute right-1/2 -bottom-3 hidden w-[230px] translate-x-[580px] -rotate-2 cursor-default opacity-0 [animation-delay:200ms] hover:-translate-y-3 md:flex md:w-[260px]'>
-            <StickyNoteTitle
-              className='pointer-events-none select-none'
-              color={NOTES.colors.blue.background}
-              readOnly
-              noteId='demo-note-4'>
-              Call mom
-            </StickyNoteTitle>
-            <StickyNoteContent
-              className='pointer-events-none select-none'
-              color={NOTES.colors.blue.background}
-              readOnly
-              noteId='demo-note-4'>
-              Remind her about the dental appointment next week
-            </StickyNoteContent>
-            <StickyNoteFooter
-              color={NOTES.colors.blue.background}
-              createdAt={new Date('2026-06-01T17:19:42-06:00')}
-              timeZone='America/Guatemala'
-            />
-          </StickyNote>
-          <StickyNote
-            color={NOTES.colors.orange.background}
-            id='demo-note-5'
-            disabled
-            className='animate-zoom-in absolute -bottom-18 left-1/2 hidden w-[230px] translate-x-[-555px] rotate-2 cursor-default opacity-0 [animation-delay:200ms] hover:-translate-y-3 md:flex lg:-bottom-8 lg:w-[280px] lg:translate-x-[-600px]'>
-            <StickyNoteTitle
-              className='pointer-events-none select-none'
-              color={NOTES.colors.orange.background}
-              readOnly
-              noteId='demo-note-5'>
-              Project meeting notes
-            </StickyNoteTitle>
-            <StickyNoteContent
-              className='pointer-events-none select-none'
-              color={NOTES.colors.orange.background}
-              readOnly
-              noteId='demo-note-5'>
-              Follow up with team on Q3 goals, review analytics, and prepare presentation
-            </StickyNoteContent>
-            <StickyNoteFooter
-              color={NOTES.colors.orange.background}
-              createdAt={new Date('2026-06-01T17:19:42-06:00')}
-              timeZone='America/Guatemala'
-            />
-          </StickyNote>
-        </div>
+        <ShowcaseNotes />
       </Panel>
     )
   }

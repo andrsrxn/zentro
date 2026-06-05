@@ -1,6 +1,8 @@
 import type { ComponentProps, RefObject } from 'react'
 import {
   AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogFooter,
@@ -52,13 +54,17 @@ export const AlertDialogConfirm = ({
       </AlertDialogHeader>
 
       <AlertDialogFooter>
-        <Button onClick={onCancel} variant='outline'>
-          {cancelButton}
-        </Button>
+        <AlertDialogCancel asChild>
+          <Button onClick={onCancel} variant='outline'>
+            {cancelButton}
+          </Button>
+        </AlertDialogCancel>
 
-        <Button onClick={onConfirm} variant={variant}>
-          {confirmButton}
-        </Button>
+        <AlertDialogAction asChild variant={variant}>
+          <Button onClick={onConfirm} variant={variant}>
+            {confirmButton}
+          </Button>
+        </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>

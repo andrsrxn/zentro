@@ -28,7 +28,8 @@
     "build:types": {
       "dependsOn": ["^build:types"],
       "inputs": ["tsconfig.json"],
-      "outputs": ["dist-types/**"]
+      "outputs": ["dist-types/**"],
+      "cache": false
     },
     "dev": {
       "dependsOn": ["^build:types"],

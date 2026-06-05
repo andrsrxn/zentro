@@ -172,7 +172,7 @@ const app = new Hono()
     // Remove the moved note to find its new neighbors
     const otherNotes = allNotes.filter(n => n.id !== id)
 
-    // Since `toIndex` is the exact 0-based index where the item belongs in the final array, it can insert it exactly at `toIndex` inside `otherNotes`
+    // Since toIndex is the 0-based index where the item belongs in the final array, it can insert it at toIndex inside otherNotes
     const insertAt = toIndex
 
     const before = otherNotes[insertAt - 1]
@@ -187,7 +187,7 @@ const app = new Hono()
       // Moving to the last position
       newOrder = before.order + NOTES.orderStep
     } else if (before && after) {
-      // Moving between two notes — fractional midpoint
+      // Moving between two notes
       newOrder = (before.order + after.order) / 2
     } else {
       // Single note, nothing to do

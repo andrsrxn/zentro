@@ -103,8 +103,6 @@ export interface Note {
   title: string
   content?: string
   color: NoteBackgroundColor
-  positionX: number
-  positionY: number
   order: number
   userId: string
   createdAt: Date

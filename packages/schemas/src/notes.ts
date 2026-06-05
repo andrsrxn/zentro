@@ -11,8 +11,6 @@ export const createNoteSchema = z.object({
     .max(100, { error: 'Max of 100 characters' }),
   content: z.string(invalidType).trim().max(500, { error: 'Max of 500 characters' }).optional(),
   color: z.enum(noteBackgroundColors, { error: 'Invalid note color' }),
-  positionX: z.number(invalidType),
-  positionY: z.number(invalidType),
 })
 
 export const updateNoteSchema = createNoteSchema.partial()

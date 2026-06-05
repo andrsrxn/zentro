@@ -127,8 +127,6 @@ export const useCreateNote = () => {
         id: `optimistic-${crypto.randomUUID()}`,
         userId: session.data?.user.id ?? '',
         order: ((snapshot.all?.length ?? 0) + 1) * NOTES.orderStep,
-        positionX: 0,
-        positionY: 0,
         title: input.title,
         content: input.content,
         color: input.color,

@@ -107,9 +107,6 @@ export const notes = pgTable(
       .$type<NoteBackgroundColor>()
       .default(NOTES.defaultNoteColor.background)
       .notNull(),
-    // TODO: remove position
-    positionX: t.integer().default(0).notNull(),
-    positionY: t.integer().default(0).notNull(),
     order: t
       .numeric({ precision: 100, scale: 20, mode: 'number' })
       .unique()

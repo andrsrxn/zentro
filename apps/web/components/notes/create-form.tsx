@@ -23,8 +23,6 @@ export function CreateNoteForm({
     title: '',
     content: '',
     color: NOTES.defaultNoteColor.background,
-    positionX: 0,
-    positionY: 0,
   },
   ...props
 }: {

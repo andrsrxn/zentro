@@ -59,10 +59,10 @@ export default function TermsPage() {
 
         <h2>4. User Content</h2>
         <p>
-          Users may create and store "notes" (including titles, content, colors, and layout
-          positions). You retain ownership of the data you input. However, you agree not to submit
-          sensitive, confidential, or illegal information. We are not responsible for any loss of
-          data, as the application's database may be reset periodically.
+          Users may create and store "notes" (including titles, content, colors). You retain
+          ownership of the data you input. However, you agree not to submit sensitive, confidential,
+          or illegal information. We are not responsible for any loss of data, as the application's
+          database may be reset periodically.
         </p>
 
         <h2>5. Limitation of Liability</h2>

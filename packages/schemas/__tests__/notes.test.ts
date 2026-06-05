@@ -8,8 +8,6 @@ describe('createNoteSchema', () => {
       title: 'My Note',
       content: 'This is a note content',
       color: NOTES.defaultNoteColor.background, // yellow default
-      positionX: 100,
-      positionY: 200,
     }
     const result = createNoteSchema.safeParse(validNote)
     expect(result.success).toBe(true)
@@ -19,8 +17,6 @@ describe('createNoteSchema', () => {
     const invalidNote = {
       content: 'No title',
       color: NOTES.defaultNoteColor.background,
-      positionX: 100,
-      positionY: 200,
     }
     const result = createNoteSchema.safeParse(invalidNote)
     expect(result.success).toBe(false)
@@ -30,8 +26,6 @@ describe('createNoteSchema', () => {
     const invalidNote = {
       title: '   ',
       color: NOTES.defaultNoteColor.background,
-      positionX: 100,
-      positionY: 200,
     }
     const result = createNoteSchema.safeParse(invalidNote)
     expect(result.success).toBe(false)
@@ -43,8 +37,6 @@ describe('createNoteSchema', () => {
     const validNote = {
       title: 'My Note',
       color: NOTES.defaultNoteColor.background,
-      positionX: 100,
-      positionY: 200,
     }
     const result = createNoteSchema.safeParse(validNote)
     expect(result.success).toBe(true)
@@ -54,8 +46,6 @@ describe('createNoteSchema', () => {
     const invalidNote = {
       title: 'a'.repeat(101),
       color: NOTES.defaultNoteColor.background,
-      positionX: 100,
-      positionY: 200,
     }
     const result = createNoteSchema.safeParse(invalidNote)
     expect(result.success).toBe(false)
@@ -68,8 +58,6 @@ describe('createNoteSchema', () => {
       title: 'My Note',
       content: 'a'.repeat(501),
       color: NOTES.defaultNoteColor.background,
-      positionX: 100,
-      positionY: 200,
     }
     const result = createNoteSchema.safeParse(invalidNote)
     expect(result.success).toBe(false)
@@ -81,22 +69,11 @@ describe('createNoteSchema', () => {
     const invalidNote = {
       title: 'My Note',
       color: '#FF0000', // not in noteBackgroundColors
-      positionX: 100,
-      positionY: 200,
     }
     const result = createNoteSchema.safeParse(invalidNote)
     expect(result.success).toBe(false)
 
     expect(result.error?.issues[0]?.message).toBe('Invalid note color')
-  })
-
-  it('should invalidate missing position', () => {
-    const invalidNote = {
-      title: 'My Note',
-      color: NOTES.defaultNoteColor.background,
-    }
-    const result = createNoteSchema.safeParse(invalidNote)
-    expect(result.success).toBe(false)
   })
 })
 
@@ -112,14 +89,6 @@ describe('updateNoteSchema', () => {
   it('should validate empty update', () => {
     const result = updateNoteSchema.safeParse({})
     expect(result.success).toBe(true)
-  })
-
-  it('should invalidate incorrect type in partial update', () => {
-    const invalidUpdate = {
-      positionX: '100', // should be number
-    }
-    const result = updateNoteSchema.safeParse(invalidUpdate)
-    expect(result.success).toBe(false)
   })
 })
 

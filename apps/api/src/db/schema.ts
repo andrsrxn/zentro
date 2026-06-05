@@ -37,6 +37,7 @@ export const users = pgTable('users', t => ({
   image: t.text(),
   countryCode: t.text().$type<CountryCode>(),
   timeZone: t.text().$type<TimeZone>().default('UTC'),
+  isAnonymous: t.boolean('is_anonymous'),
   createdAt,
   updatedAt,
 }))
@@ -106,6 +107,7 @@ export const notes = pgTable(
       .$type<NoteBackgroundColor>()
       .default(NOTES.defaultNoteColor.background)
       .notNull(),
+    // TODO: remove position
     positionX: t.integer().default(0).notNull(),
     positionY: t.integer().default(0).notNull(),
     order: t

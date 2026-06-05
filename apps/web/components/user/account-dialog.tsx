@@ -14,9 +14,7 @@ import { AUTH } from '@zentro/constants/auth'
 import type { CountryCode, TimeZone } from '@zentro/constants/countries'
 import { formatDate } from '@zentro/utils/dates'
 import { capitalizeFirstLetter } from '@zentro/utils/strings'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { toast } from 'sonner'
 import { GitHubIcon } from '@/components/icons/github'
 import { GoogleIcon } from '@/components/icons/google'
 import { HeaderCountryFlag } from '@/components/shared/country-flag'
@@ -31,10 +29,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
+import { useDeleteAccount, useDeleteAnonymousAccount } from '@/lib/hooks/use-auth'
 import { useConfirm } from '@/lib/hooks/use-confirm'
 import { authClient } from '@/lib/services/auth-client'
 import { useUserStore } from '@/lib/store/user'
-import { deleteCsrfToken } from '@/lib/utils/csrf'
 import { formatUserAgent } from '@/lib/utils/device'
 import { getCountryName } from '@/lib/utils/geolocation'
 
@@ -66,13 +64,40 @@ export const AccountDialog = () => {
   const setAccountDialogOpen = useUserStore(state => state.setAccountDialogOpen)
   const [isConfirmOpen, confirm, handleConfirm, handleCancel] = useConfirm()
   const [isDeleting, setIsDeleting] = useState(false)
-  const { refresh } = useRouter()
+  const { deleteAccount } = useDeleteAccount()
+  const { deleteAnonymousAccount } = useDeleteAnonymousAccount()
 
   const session = authClient.useSession()
   if (!session.data) {
     return null
   }
   const lastMethod = authClient.getLastUsedLoginMethod()
+
+  const handleDeleteAccount = async () => {
+    const confirmed = await confirm()
+    if (confirmed) {
+      setIsDeleting(true)
+
+      const res = await deleteAccount()
+
+      if (res.error) {
+        setIsDeleting(false)
+      }
+    }
+  }
+
+  const handleDeleteAnonymousAccount = async () => {
+    const confirmed = await confirm()
+    if (confirmed) {
+      setIsDeleting(true)
+
+      const res = await deleteAnonymousAccount()
+
+      if (res.error) {
+        setIsDeleting(false)
+      }
+    }
+  }
 
   return (
     <>
@@ -105,11 +130,13 @@ export const AccountDialog = () => {
               <span className='truncate text-xl leading-tight font-bold'>
                 {session.data.user.name}
               </span>
-              <span className='-my-1 truncate text-sm leading-tight'>
-                {session.data.user.email}
-              </span>
+              {session.data.user.isAnonymous ? null : (
+                <span className='-my-1 truncate text-sm leading-tight'>
+                  {session.data.user.email}
+                </span>
+              )}
               <Separator className='my-2' />
-              {lastMethod ? (
+              {!session.data.user.isAnonymous && lastMethod ? (
                 <span className='flex items-center gap-2 truncate text-sm [&_svg]:size-4'>
                   <IconLock />
                   <span className='text-muted-foreground'>Signed in with</span>
@@ -147,33 +174,11 @@ export const AccountDialog = () => {
                 <Button
                   variant='destructive'
                   disabled={isDeleting}
-                  onClick={async () => {
-                    const confirmed = await confirm()
-                    if (confirmed) {
-                      setIsDeleting(true)
-
-                      const res = await authClient.deleteUser({
-                        callbackURL: '/',
-                      })
-
-                      if (res.error) {
-                        if (res.error.code === 'SESSION_EXPIRED') {
-                          toast.error('Session expired, please log in again to delete your account')
-                        } else {
-                          toast.error('Could not delete account, try again later')
-                        }
-                        setIsDeleting(false)
-                        return
-                      }
-
-                      if (res.data?.success) {
-                        deleteCsrfToken()
-
-                        refresh()
-                        authClient.clearLastUsedLoginMethod()
-                      }
-                    }
-                  }}>
+                  onClick={
+                    session.data.user.isAnonymous
+                      ? handleDeleteAnonymousAccount
+                      : handleDeleteAccount
+                  }>
                   {isDeleting ? 'Deleting...' : 'Delete Account'}
                 </Button>
               </span>

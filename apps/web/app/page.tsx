@@ -103,7 +103,8 @@ export default async function Home() {
 
             <AccountDropdown
               name={session.data.user.name}
-              email={session.data.user.email}
+              email={session.data.user.isAnonymous ? undefined : session.data.user.email}
+              isAnonymous={session.data.user.isAnonymous ?? false}
               avatar={session.data.user.image ?? undefined}
               countryCode={session.data.user.countryCode}
             />

@@ -4,7 +4,7 @@ import { COOKIE_OPTIONS } from '@zentro/constants/cookies'
 import { isProductionEnv } from '@zentro/utils/env'
 import { drizzleAdapter } from 'better-auth/adapters/drizzle'
 import { betterAuth } from 'better-auth/minimal'
-import { lastLoginMethod, openAPI } from 'better-auth/plugins'
+import { anonymous, lastLoginMethod, openAPI } from 'better-auth/plugins'
 import { env } from '@/config/env'
 import { API } from '@/constants/api'
 import { ALLOWED_ORIGINS } from '@/constants/hosts'
@@ -28,7 +28,15 @@ export const auth = betterAuth({
       domain: COOKIE_OPTIONS.domain,
     },
   },
-  plugins: [openAPI(), lastLoginMethod()],
+  plugins: [
+    openAPI(),
+    lastLoginMethod(),
+    anonymous({
+      generateName: () => {
+        return 'Guest'
+      },
+    }),
+  ],
   appName: API.name,
   basePath: '/v1/auth',
   baseURL: env.BETTER_AUTH_URL,
@@ -90,13 +98,11 @@ export const auth = betterAuth({
   trustedOrigins: ALLOWED_ORIGINS,
   socialProviders: {
     github: {
-      prompt: 'select_account',
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
       scope: ['user:email'],
     },
     google: {
-      prompt: 'select_account',
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
       scope: ['profile', 'email'],

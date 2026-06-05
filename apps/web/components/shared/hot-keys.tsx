@@ -37,8 +37,6 @@ export const HotKeys = () => {
   })
 
   useHotkey('D', () => {
-    console.log({ resolvedTheme })
-
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
   })
 

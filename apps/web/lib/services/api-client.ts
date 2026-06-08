@@ -40,7 +40,8 @@ export async function rpc<T extends Promise<Response>>({
     if (parsed.error) {
       throw new AppError(parsed.error.statusCode, {
         message: parsed.error.message,
-
+        details: parsed.error?.details,
+        errors: parsed.error?.errors,
         type: parsed.error.type,
       })
     }
@@ -49,6 +50,8 @@ export async function rpc<T extends Promise<Response>>({
       throw new AppError(error.statusCode, {
         message: error.message,
         type: error.type,
+        details: error?.details,
+        errors: error?.errors,
       })
     }
 

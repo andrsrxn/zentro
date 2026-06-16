@@ -75,7 +75,7 @@ export const reconcileNote = (qc: QueryClient, id: string, serverNote: Note) => 
 export const useNotes = () => {
   const query = useQuery({
     queryKey: NOTES.tags.all(),
-    queryFn: getNotes,
+    queryFn: ({ signal }) => getNotes({ signal }),
     select: notes => notes?.map(note => normalizeNote(note)),
   })
 
@@ -92,7 +92,7 @@ export const useNotes = () => {
 export const useNote = ({ id }: { id: string }) => {
   const query = useQuery({
     queryKey: NOTES.tags.single(id),
-    queryFn: () => getNoteById({ id }),
+    queryFn: ({ signal }) => getNoteById({ id, signal }),
     select: note => (note ? normalizeNote(note) : undefined),
   })
 

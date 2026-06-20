@@ -44,7 +44,13 @@
     "start": {
       "dependsOn": ["^build"]
     },
-    "test": {
+    "test:unit": {
+      "dependsOn": ["^build:types"],
+      "outputs": ["coverage/**"],
+      "cache": false,
+      "persistent": true
+    },
+    "test:e2e": {
       "dependsOn": ["^build:types"],
       "outputs": ["coverage/**"],
       "cache": false,

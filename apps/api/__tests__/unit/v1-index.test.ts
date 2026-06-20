@@ -1,7 +1,7 @@
 import { SUCCESS } from '@zentro/constants/success'
 import { testClient } from 'hono/testing'
 import { describe, expect, it } from 'vitest'
-import { routes } from '../src/index'
+import { routes } from '../../src/index'
 
 describe('V1 Main Routes', () => {
   const client = testClient(routes).v1

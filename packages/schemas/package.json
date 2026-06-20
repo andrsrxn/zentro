@@ -19,7 +19,7 @@
     "build": "tsdown",
     "typecheck": "tsc",
     "lint": "biome check",
-    "test": "vitest"
+    "test:unit": "vitest"
   },
   "files": [
     "dist"

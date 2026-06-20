@@ -6,7 +6,8 @@ export default mergeConfig(
   defineConfig({
     test: {
       name: 'web',
-      setupFiles: ['./__tests__/setup.ts'],
+      setupFiles: ['./__tests__/unit/setup.ts'],
+      include: ['./__tests__/unit/**/*.{test,spec}.?(c|m)[jt]s?(x)'],
     },
   })
 )

@@ -22,7 +22,7 @@
     "db:push": "turbo run db:push && echo DB Push finished",
     "db:studio": "turbo run db:studio",
     "db:auth:docs": "turbo run db:auth:docs",
-    "test": "turbo run test",
+    "test:unit": "turbo run test:unit",
     "clean": "pnpm -r exec rm -rf node_modules .turbo dist dist-types && echo Clean finished",
     "typecoverage": "pnpm dlx type-coverage -at-least=99 && echo Typecoverage finished.",
     "depcheck": "pnpm dlx knip && echo Depcheck finished.",

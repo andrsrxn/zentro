@@ -8,7 +8,7 @@
     "build": "tsdown",
     "typecheck": "tsc --noEmit -p tsconfig.json",
     "start": "node dist/index.mjs",
-    "test": "vitest",
+    "test:unit": "vitest",
     "db:generate": "cross-env NODE_OPTIONS=--conditions=development drizzle-kit generate",
     "db:studio": "cross-env NODE_OPTIONS=--conditions=development drizzle-kit studio",
     "db:migrate": "cross-env NODE_OPTIONS=--conditions=development drizzle-kit migrate",
@@ -45,6 +45,7 @@
     "@zentro/vitest-config": "workspace:*",
     "cross-env": "7.0.3",
     "drizzle-kit": "0.31.10",
+    "msw": "2.14.6",
     "open-cli": "9.0.0",
     "tsdown": "0.22.0",
     "tsx": "4.22.3"

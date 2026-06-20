@@ -662,6 +662,9 @@
           },
           "performance": {
             "useTopLevelRegex": "off"
+          },
+          "complexity": {
+            "noExcessiveLinesPerFunction": "off"
           }
         }
       }

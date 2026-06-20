@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "biome check",
     "typecheck": "tsc",
-    "test": "vitest"
+    "test:unit": "vitest"
   },
   "dependencies": {
     "@dnd-kit/abstract": "0.4.0",
@@ -56,6 +56,7 @@
     "@types/ua-parser-js": "0.7.39",
     "@zentro/ts-config": "workspace:*",
     "@zentro/vitest-config": "workspace:*",
+    "msw": "2.14.6",
     "tailwindcss": "^4"
   }
 }

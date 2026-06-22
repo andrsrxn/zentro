@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/vitest'
-import { afterAll, afterEach, beforeAll, vi } from 'vitest'
 import { setupServer } from 'msw/node'
+import { afterAll, afterEach, beforeAll, vi } from 'vitest'
 
 export const server = setupServer()
 

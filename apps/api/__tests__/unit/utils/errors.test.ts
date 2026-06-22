@@ -1,11 +1,14 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest'
-import { gracefulShutdown, sendFieldValidationErrors } from '@/utils/errors'
-import { logger } from '@/utils/logger'
-import { db } from '@/db/drizzle'
+/** biome-ignore-all lint/nursery/noConditionalExpect: test code */
+/** biome-ignore-all lint/suspicious/noExplicitAny: to not actually exit the test process */
+
 import type { ServerType } from '@hono/node-server'
 import { HTTP_ERRORS } from '@zentro/constants/errors'
 import { AppError } from '@zentro/utils/errors'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { $ZodError } from 'zod/v4/core'
+import { db } from '@/db/drizzle'
+import { gracefulShutdown, sendFieldValidationErrors } from '@/utils/errors'
+import { logger } from '@/utils/logger'
 
 // Mock dependencies
 vi.mock('@/utils/logger', () => ({
@@ -16,6 +19,7 @@ vi.mock('@/utils/logger', () => ({
 
 vi.mock('@/db/drizzle', () => ({
   db: {
+    // biome-ignore lint/style/useNamingConvention: RPC
     $client: {
       end: vi.fn().mockResolvedValue(undefined),
     },
@@ -29,7 +33,7 @@ describe('errors utils', () => {
 
   describe('gracefulShutdown', () => {
     it('logs the error and closes db and server', async () => {
-      const mockServerClose = vi.fn((cb) => cb && cb(undefined))
+      const mockServerClose = vi.fn(cb => cb?.(undefined))
       const mockServer = {
         close: mockServerClose,
       } as unknown as ServerType
@@ -48,7 +52,7 @@ describe('errors utils', () => {
     })
 
     it('exits with 1 if server.close passes an error', async () => {
-      const mockServerClose = vi.fn((cb) => cb && cb(new Error('Close error')))
+      const mockServerClose = vi.fn(cb => cb?.(new Error('Close error')))
       const mockServer = {
         close: mockServerClose,
       } as unknown as ServerType
@@ -65,7 +69,7 @@ describe('errors utils', () => {
 
     it('logs db close error but still exits', async () => {
       vi.mocked(db.$client.end).mockRejectedValueOnce(new Error('DB error'))
-      const mockServerClose = vi.fn((cb) => cb && cb(undefined))
+      const mockServerClose = vi.fn(cb => cb?.(undefined))
       const mockServer = {
         close: mockServerClose,
       } as unknown as ServerType

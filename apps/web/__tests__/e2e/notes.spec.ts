@@ -16,64 +16,31 @@ test.describe('Notes CRUD Operations', () => {
     const testContent = 'This is the content for the E2E test note.'
 
     // CREATE
-    // Open the create note modal
     await page.getByRole('button', { name: /Create Note/iu }).click()
-
-    // Fill the form
     await page.getByPlaceholder('Note title...').fill(testTitle)
     await page.getByPlaceholder('Additional details... (optional)').fill(testContent)
-
-    // Click submit
     await page.getByRole('button', { name: 'Create Note' }).click()
 
-    // The modal should close and note should appear in the list
-    const newNote = page.locator('[data-slot="sticky-note"]', { hasText: testTitle })
-    await expect(newNote).toBeVisible()
+    const note = page.locator('[data-slot="sticky-note"]', { hasText: testTitle })
+    const dropdownTrigger = note.locator('button', { has: page.locator('svg.tabler-icon-dots') })
 
     // READ
-    await expect(newNote).toContainText(testContent)
+    await expect(note).toBeVisible()
+    await expect(note).toContainText(testContent)
 
     // UPDATE (Color)
-    // Find the dropdown trigger (IconDots) within the note
-    const dropdownTrigger = newNote.locator('button', { has: page.locator('svg.tabler-icon-dots') })
-
     await dropdownTrigger.click()
-
-    // Open color submenu
     await page.getByRole('menuitem', { name: 'Color' }).hover()
-
-    // Choose a different color, we click the second one (assuming default is the first)
-    // The component sets aria-label to capitalized key, e.g., 'Yellow', 'Blue'
     await page.getByRole('menuitem', { name: 'Blue' }).click()
+    await expect(note).toHaveAttribute('style', /color: rgb\(13, 43, 62\)/iu, { timeout: 5000 })
 
-    // Assert that the color changed
-    // The background color of the StickyNote should be updated. We check the style attribute.
-    // Wait for the background to change (optimistic update might take a frame, network might take more)
-    await expect(newNote).toHaveAttribute('style', /color: rgb\(13, 43, 62\)/iu, { timeout: 5000 })
-
-    // DELETE - re-query the trigger after the note re-rendered
-    // Escape any lingering state
+    // DELETE
     await page.keyboard.press('Escape')
-
-    const newNoteTwo = page.locator('[data-slot="sticky-note"]', { hasText: testTitle })
-    await expect(newNoteTwo).toBeVisible()
-
-    // READ
-    await expect(newNoteTwo).toContainText(testContent)
-
-    // Find the dropdown trigger (IconDots) within the note
-    const dropdownTriggerTwo = newNoteTwo.locator('button', {
-      has: page.locator('svg.tabler-icon-dots'),
-    })
-
-    await dropdownTriggerTwo.click()
-
+    await expect(note).toBeVisible()
+    await dropdownTrigger.click()
     await page.getByRole('menuitem', { name: 'Delete' }).click()
-
-    // Confirm deletion
     await expect(page.getByRole('alertdialog')).toBeVisible({ timeout: 5000 })
     await page.getByRole('button', { name: 'Delete' }).click()
-
-    await expect(newNoteTwo).not.toBeVisible()
+    await expect(note).not.toBeVisible()
   })
 })

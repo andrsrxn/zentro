@@ -51,7 +51,8 @@
       "persistent": true
     },
     "test:e2e": {
-      "dependsOn": ["^build:types"],
+      "passThroughEnv": ["PLAYWRIGHT_*"],
+      "dependsOn": ["^build:types", "^build"],
       "outputs": ["coverage/**"],
       "cache": false,
       "persistent": true

@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "biome check",
     "typecheck": "tsc",
-    "test:unit": "vitest"
+    "test:unit": "vitest",
+    "test:e2e": "playwright test --ui"
   },
   "dependencies": {
     "@dnd-kit/abstract": "0.4.0",
@@ -45,6 +46,7 @@
     "zustand": "5.0.13"
   },
   "devDependencies": {
+    "@playwright/test": "1.61.0",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "0.5.19",
     "@testing-library/jest-dom": "6.9.1",

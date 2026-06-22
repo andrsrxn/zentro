@@ -16,6 +16,8 @@
       "!**/node_modules",
       "!**/pnpm-lock.yaml",
       "!**/*.tsbuildinfo",
+      "!**/playwright-report",
+      "!**/test-results",
       "!**/*.lock"
     ]
   },

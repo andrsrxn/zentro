@@ -17,9 +17,9 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "vitest.config.ts",
-    "**/*.mts"
+    "playwright.config.ts"
   ],
-  "exclude": [".turbo", ".next", "node_modules"],
+  "exclude": [".turbo", ".next", "node_modules", "playwright-report", "test-results"],
   "references": [
     {
       "path": "../api"

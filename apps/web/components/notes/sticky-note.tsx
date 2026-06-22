@@ -64,9 +64,13 @@ export const StickyNoteTitle = ({
   noteId: string
 }) => {
   const inputRef = useRef<HTMLTextAreaElement>(null)
-  const initialValueRef = useRef(children.trim())
+  const initialValueRef = useRef<string>('')
   const fgColor = getNoteForegroundColor(color)
   const { mutate: updateNote, isPending } = useUpdateNote()
+
+  if (inputRef.current === null) {
+    initialValueRef.current = children.trim()
+  }
 
   const handleSave = (value: string) => {
     const trimmed = value.trim()

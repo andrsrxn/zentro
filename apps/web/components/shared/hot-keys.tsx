@@ -8,6 +8,13 @@ import { useNotesStore } from '@/lib/store/notes'
 import { useSharedStore } from '@/lib/store/shared'
 import { useUserStore } from '@/lib/store/user'
 
+const confettiOptions: confetti.Options = {
+  colors: [COMPANY.brand.primaryColor, COMPANY.brand.backgroundColor],
+  startVelocity: 20,
+  particleCount: 100,
+  spread: 200,
+}
+
 export const HotKeys = () => {
   const setOpenCreateForm = useNotesStore(state => state.setOpenCreateForm)
   const setShortcutsDialogOpen = useSharedStore(state => state.setShortcutsDialogOpen)
@@ -39,13 +46,6 @@ export const HotKeys = () => {
   useHotkey('D', () => {
     setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
   })
-
-  const confettiOptions: confetti.Options = {
-    colors: [COMPANY.brand.primaryColor, COMPANY.brand.backgroundColor],
-    startVelocity: 20,
-    particleCount: 100,
-    spread: 200,
-  }
 
   useHotkey('Control+P', () => {
     confetti({

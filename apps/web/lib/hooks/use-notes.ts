@@ -5,28 +5,24 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { NOTES, type Note } from '@zentro/constants/notes'
 import type { CreateNoteInput, UpdateNoteInput, UpdateNoteOrderInput } from '@zentro/schemas/notes'
 import { toast } from 'sonner'
-import { getNoteById, getNotes } from '@/lib/data/notes'
+import { getNotes } from '@/lib/data/notes'
 import { createNote, deleteNote, updateNote, updateNoteOrder } from '@/lib/mutations/notes'
 import { authClient } from '@/lib/services/auth-client'
 
 // Shared logic
 
-export const snapshotNotes = (qc: QueryClient) => ({
+const snapshotNotes = (qc: QueryClient) => ({
   all: qc.getQueryData<Note[]>(NOTES.tags.all()),
   single: (id: string) => qc.getQueryData<Note>(NOTES.tags.single(id)),
 })
 
-export const cancelNoteQueries = (qc: QueryClient, id?: string) =>
+const cancelNoteQueries = (qc: QueryClient, id?: string) =>
   Promise.all([
     qc.cancelQueries({ queryKey: NOTES.tags.all() }),
     ...(id ? [qc.cancelQueries({ queryKey: NOTES.tags.single(id) })] : []),
   ])
 
-export const rollbackNotes = (
-  qc: QueryClient,
-  snapshot: { all?: Note[]; note?: Note },
-  id?: string
-) => {
+const rollbackNotes = (qc: QueryClient, snapshot: { all?: Note[]; note?: Note }, id?: string) => {
   if (snapshot.all) {
     qc.setQueryData<Note[]>(
       NOTES.tags.all(),
@@ -38,7 +34,7 @@ export const rollbackNotes = (
   }
 }
 
-export const normalizeNote = (
+const normalizeNote = (
   note: Omit<Note, 'createdAt' | 'updatedAt'> & {
     createdAt: string | Date
     updatedAt: string | Date
@@ -49,22 +45,22 @@ export const normalizeNote = (
   updatedAt: new Date(note.updatedAt),
 })
 
-export const setNoteInList = (qc: QueryClient, id: string, note: Note) =>
+const setNoteInList = (qc: QueryClient, id: string, note: Note) =>
   qc.setQueryData<Note[]>(
     NOTES.tags.all(),
     old => old?.map(n => (n.id === id ? note : n)) ?? [note]
   )
 
-export const setSingleNote = (qc: QueryClient, id: string, note: Note) =>
+const setSingleNote = (qc: QueryClient, id: string, note: Note) =>
   qc.setQueryData<Note>(NOTES.tags.single(id), note)
 
-export const addNoteToList = (qc: QueryClient, note: Note) =>
+const addNoteToList = (qc: QueryClient, note: Note) =>
   qc.setQueryData<Note[]>(NOTES.tags.all(), old => (old ? [...old, note] : [note]))
 
-export const removeNoteFromList = (qc: QueryClient, id: string) =>
+const removeNoteFromList = (qc: QueryClient, id: string) =>
   qc.setQueryData<Note[]>(NOTES.tags.all(), old => old?.filter(n => n.id !== id))
 
-export const reconcileNote = (qc: QueryClient, id: string, serverNote: Note) => {
+const reconcileNote = (qc: QueryClient, id: string, serverNote: Note) => {
   const normalized = normalizeNote(serverNote)
   setNoteInList(qc, id, normalized)
   setSingleNote(qc, id, normalized)
@@ -73,36 +69,19 @@ export const reconcileNote = (qc: QueryClient, id: string, serverNote: Note) => 
 // Hooks
 
 export const useNotes = () => {
-  const query = useQuery({
+  const { data, error, isPending, isLoading, isFetching, refetch } = useQuery({
     queryKey: NOTES.tags.all(),
     queryFn: ({ signal }) => getNotes({ signal }),
     select: notes => notes?.map(note => normalizeNote(note)),
   })
 
   return {
-    notes: query.data ?? [],
-    error: query.error,
-    isPending: query.isPending,
-    isLoading: query.isLoading,
-    isFetching: query.isFetching,
-    refetch: query.refetch,
-  } as const
-}
-
-export const useNote = ({ id }: { id: string }) => {
-  const query = useQuery({
-    queryKey: NOTES.tags.single(id),
-    queryFn: ({ signal }) => getNoteById({ id, signal }),
-    select: note => (note ? normalizeNote(note) : undefined),
-  })
-
-  return {
-    note: query.data ?? undefined,
-    error: query.error,
-    isPending: query.isPending,
-    isLoading: query.isLoading,
-    isFetching: query.isFetching,
-    refetch: query.refetch,
+    notes: data ?? [],
+    error,
+    isPending,
+    isLoading,
+    isFetching,
+    refetch,
   } as const
 }
 

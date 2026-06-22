@@ -88,6 +88,7 @@ export default async function Home() {
           </div>
           <div className='-mr-1 flex items-center gap-3'>
             <time
+              suppressHydrationWarning
               className='mr-1 text-sm font-medium'
               dateTime={new Date().toISOString()}
               title={formatDate({

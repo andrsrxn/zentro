@@ -35,7 +35,8 @@ export function CreateNoteForm({
     resolver: zodResolver(createNoteSchema),
     defaultValues,
   })
-  const [color, setColor] = useState<NoteBackgroundColor>(defaultValues.color)
+  const defaultColor = defaultValues.color
+  const [color, setColor] = useState<NoteBackgroundColor>(defaultColor)
   const fgColor = getNoteForegroundColor(color)
 
   const { mutate: createNote } = useCreateNote()

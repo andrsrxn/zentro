@@ -1,8 +1,8 @@
-![Zentro banner with laptop and mobile app views](https://res.cloudinary.com/dq5nfyajn/image/upload/v1779723713/banner_ryysvb.webp)
-
 # Zentro | Notes App
 
 A fast, modern notes application that helps you stay organized.
+
+![Zentro banner with laptop and mobile app views](https://res.cloudinary.com/dq5nfyajn/image/upload/v1779723713/banner_ryysvb.webp)
 
 ## Tech Stack
 
